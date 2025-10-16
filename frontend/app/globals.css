@@ -1,0 +1,471 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Core palette */
+  --bg: #0a0b0b; /* near-black background */
+  --fg: #e8ecef; /* off-white foreground */
+  --muted-fg: #9aa4ad; /* neutral gray text */
+  --brand: #00e28f; /* neon teal primary */
+  --surface: #ffffff; /* white for contrast sections */
+  --border-weak: #1a1f1d; /* subtle border on dark */
+
+  /* Component radius */
+  --radius: 1.25rem; /* rounded borders only, slightly larger */
+
+  /* Glow colors */
+  --glow-outer: rgba(0, 226, 143, 0.35);
+  --glow-inner: rgba(0, 226, 143, 0.18);
+
+  /* section + text tokens */
+  --hero-bg: var(--bg);
+  --section-dark: var(--bg);
+  --section-light: var(--surface);
+  --text: var(--fg);
+  --text-strong: #f2f6f7;
+  --text-muted: var(--muted-fg);
+  --on-brand: #07110e;
+
+  /* surfaces for elevated panels */
+  --bg-elevated: rgba(255, 255, 255, 0.04);
+  --bg-elevated-solid: #0f1211;
+  --panel: rgba(255, 255, 255, 0.06);
+
+  /* charcoal background for showcase */
+  --charcoal: #0a0b0b; /* charcoal black, not gray */
+
+  /* glass nav and fixed black text tokens */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.35);
+  --text-strong-fixed: #000;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+
+  /* Dark mode preserves same look (site is primarily dark) */
+  --background: var(--bg);
+  --foreground: var(--fg);
+  --card: var(--bg);
+  --card-foreground: var(--fg);
+  --primary: var(--brand);
+  --secondary: var(--surface);
+  --secondary-foreground: #0b0f0e;
+  --muted: #0f1413;
+  --muted-foreground: var(--muted-fg);
+  --border: var(--border-weak);
+  --ring: var(--brand);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  /* define font-sans to use Exo 2 only (with safe fallbacks) */
+  --font-sans: "Exo 2", system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans",
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* Typographic display helpers to match the reference scale */
+.display {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.display-lg {
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  line-height: 1.15;
+}
+.display-xl {
+  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  line-height: 1.05;
+}
+
+/* Sections and containers */
+.section {
+  padding: 4rem 1rem;
+}
+@media (min-width: 768px) {
+  .section {
+    padding: 6rem 1.5rem;
+  }
+}
+
+.section-dark {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.section-light {
+  background: var(--surface);
+  color: var(--bg);
+}
+
+.section-light .muted {
+  color: #666;
+}
+
+.rounded-container {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02) inset, 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.surface {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Buttons */
+.btn {
+  --btn-bg: var(--brand);
+  --btn-fg: #0a0f0d;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1px solid color-mix(in oklab, var(--brand) 60%, black);
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+  box-shadow: 0 0 24px var(--glow-outer), 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 34px var(--glow-outer), 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+}
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--brand);
+  color: var(--bg);
+  border: 1px solid var(--brand);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Image frame (from-scratch mock panels replace external images) */
+.img-frame {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.25));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 0 80px var(--glow-inner);
+  overflow: hidden;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+}
+
+/* Mock UI blocks to mimic reference feel without embedding images */
+.mock-panel {
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+.mock-title {
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  width: 56%;
+  margin-bottom: 12px;
+}
+.mock-line {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  margin-top: 8px;
+  width: 90%;
+}
+.mock-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem .6rem;
+  border-radius: 999px;
+  background: rgba(0, 226, 143, 0.12);
+  color: var(--brand);
+  border: 1px solid rgba(0, 226, 143, 0.35);
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+/* Scroll reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Sticky stacking cards */
+.stack-section {
+  position: relative;
+  display: grid;
+  gap: 2rem;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 300px;
+  margin-left: auto;
+}
+
+.stack-card {
+  position: sticky;
+  top: 6rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.4), 0 0 60px var(--glow-inner);
+  backdrop-filter: blur(6px);
+}
+
+.stack-card[data-depth="2"] {
+  transform: translateY(-1rem) scale(0.98);
+}
+
+.stack-card[data-depth="3"] {
+  transform: translateY(-2rem) scale(0.96);
+}
+
+/* Navbar tighter spacing */
+.navbar {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--border-weak);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  margin-bottom: 0; /* remove extra spacing */
+}
+
+/* Hero section dark background */
+.hero-vignette {
+  background: radial-gradient(ellipse at center, rgba(0, 226, 143, 0.05) 0%, var(--bg) 70%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-vignette::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+  pointer-events: none;
+}
+
+/* Typography updates for better contrast */
+.h1 {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.h2 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.muted {
+  color: var(--muted-fg);
+}
+
+/* Glow effects */
+.glow-teal {
+  box-shadow: 0 0 30px var(--glow-outer);
+}
+
+.text-glow-teal {
+  text-shadow: 0 0 20px var(--glow-outer);
+}
+
+/* Fullscreen horizontal scroll for demos */
+.fullscreen-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 2rem;
+  padding: 2rem;
+  margin: 0 -2rem;
+}
+
+.panel {
+  min-width: 100vw;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+/* Rounded all utility */
+.rounded-all {
+  border-radius: var(--radius);
+}
+
+/* add smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Keyframes for testimonial stack-in animation */
+@keyframes stackIn {
+  from {
+    opacity: 0;
+    transform: translateX(40px) translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+}
+
+/* Keyframes for testimonial stack-in animation from left */
+@keyframes stackPopInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px) translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+}

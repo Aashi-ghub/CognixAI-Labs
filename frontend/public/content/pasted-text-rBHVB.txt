@@ -1,0 +1,60 @@
+Responsive design with mobile-first priority.
+
+Smooth scroll-triggered animations and parallax effects to engage visitors (e.g., fading in sections, slide-in cards, background parallax layers).
+
+Sticky navigation with scrollspy highlighting active sections.
+
+Subtle micro-interactions on buttons, links, and hover states for polish.
+
+Homepage
+Hero Section:
+Full viewport background video or dynamic animation showing AI + automation concepts (robots, data flows, gear animations), overlay with a bold typed text animation cycling key benefits: “Automate Fast. Save Time. Scale Smarter.”
+Call-to-Action (CTA) buttons: “See Demos” and “Book Free Consultation” with hover glow effects.
+
+About Us Section:
+Split layout with a professional photo or illustration on one side, and text explaining your story, vision, and college founding story on the other side with slide-in transition on scroll.
+
+Core Services Carousel:
+A horizontal scrolling carousel displaying main services with icons—the cards should have hover 3D tilt effects and dynamic shadows.
+
+Why Choose Us:
+Animated infographic or icon grid illustrating key differentiators: fast delivery, personalized service, AI expertise, global clients, guarantees.
+
+Client Testimonials:
+Rotating slider with client photos, quotes, and star ratings, auto and manual controls, smooth fade transitions.
+
+Tech Stack & Tools Section:
+Animated logos and brief descriptions of AI tools/automation platforms you specialize in (OpenAI, Zapier, UiPath, Python, etc.) with bounce-in effects.
+
+Contact & CTA Section:
+Interactive contact form with real-time validation, chatbot pop-up for FAQ, and embedded calendar for instant demo scheduling.
+
+Services Page
+Detailed service cards with interactive tabs or accordions that expand content on click, including case studies and embedded demo videos.
+
+Include a dynamic pricing calculator widget allowing visitors to estimate project costs based on selected services and complexity.
+
+Integrate a “Book a Free Strategy Call” floating button on all service details.
+
+Case Studies & Demo Gallery
+Masonry grid layout with filters by industry/niche (e.g., Marketing, E-commerce, SaaS).
+
+Each project card opens a modal with short project summary, challenge-solution-impact visualization with scroll-triggered animated graphs and video walkthroughs.
+
+Footer
+Newsletter signup with AI-generated suggestions based on visitor interaction.
+
+Quick links, social media icons with hover color transitions.
+
+Privacy policy and terms links.
+
+Additional Features
+Dark Mode toggle to switch site theme.
+
+SEO optimized with fast load times and structured data markup for better search indexing.
+
+Google Analytics + Hotjar integration for traffic and behavior insights.
+
+Live chat support integration for lead capture.
+
+Multilingual support starting with English and potential expansion.

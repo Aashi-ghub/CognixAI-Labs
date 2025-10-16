@@ -1,0 +1,35 @@
+Goal: Create a professional online portfolio/website and branding presence that clearly conveys expertise in AI automation, builds trust for foreign clients, and drives inquiries.
+
+Prompt:
+
+"Build a sleek, modern website and portfolio for an AI automation agency owned by two college founders that targets small to mid-sized foreign businesses (especially US/EU). The website should include:
+
+Homepage with a clear tagline explaining what we do (e.g., ‘AI-Powered Automation to Optimize Your Business Workflows’) and a concise summary of benefits (save time, cut costs, scale fast).
+
+Services page that lists our core AI automation offerings tailored to high-demand niches:
+
+Marketing automation (campaign tracking, CRM workflows)
+
+E-commerce automation (order management, chatbots)
+
+SaaS onboarding & analytics automation
+
+Case Studies/Demos showing 2-3 quick-solved problems with screen recordings or animated walkthroughs explaining the problem, solution, and result.
+
+About Us describing our background as tech-savvy college founders passionate about automation, emphasizing agility, personalized service, and commitment to client success.
+
+Client Testimonials section (can start with peer/test project feedback) showcasing early trust signals.
+
+Contact & Inquiry Form optimized for easy conversion and rapid response.
+
+Mobile-friendly, fast-loading, simple but professional design.
+
+Supporting branding assets should include:
+
+Logo: Minimalist AI/automation-themed symbol with clean typography.
+
+LinkedIn, Upwork profile setup: Consistent professional photo, business description, and portfolio highlights.
+
+Consistent color palette: Trustworthy tones like blue, grey, and white.
+
+Professional email domain and email signature works.
