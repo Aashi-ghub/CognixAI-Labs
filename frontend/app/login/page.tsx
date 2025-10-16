@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { supabaseClient } from "@/lib/supabase-client"
+import { createClient } from "@supabase/supabase-js"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -10,7 +10,14 @@ export default function LoginPage() {
   async function sendMagicLink(e: React.FormEvent) {
     e.preventDefault()
     setStatus("sending")
-    const { error } = await supabaseClient.auth.signInWithOtp({ email })
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+    if (!supabaseUrl || !supabaseAnonKey) {
+      setStatus("error")
+      return
+    }
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
+    const { error } = await supabase.auth.signInWithOtp({ email })
     if (error) {
       setStatus("error")
     } else {
@@ -25,13 +32,27 @@ export default function LoginPage() {
     const data = new FormData(form)
     const emailVal = (data.get("email") as string) || ""
     const passwordVal = (data.get("password") as string) || ""
-    const { error } = await supabaseClient.auth.signInWithPassword({ email: emailVal, password: passwordVal })
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+    if (!supabaseUrl || !supabaseAnonKey) {
+      setStatus("error")
+      return
+    }
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
+    const { error } = await supabase.auth.signInWithPassword({ email: emailVal, password: passwordVal })
     setStatus(error ? "error" : "sent")
   }
 
   async function signInWithGoogle() {
     setStatus("sending")
-    const { error } = await supabaseClient.auth.signInWithOAuth({ provider: "google" })
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+    if (!supabaseUrl || !supabaseAnonKey) {
+      setStatus("error")
+      return
+    }
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
+    const { error } = await supabase.auth.signInWithOAuth({ provider: "google" })
     setStatus(error ? "error" : "idle")
   }
 
