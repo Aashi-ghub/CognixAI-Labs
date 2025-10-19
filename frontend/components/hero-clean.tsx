@@ -106,15 +106,15 @@ export default function HeroClean() {
             {
               "@context": "https://schema.org",
               "@type": "Organization",
-              name: "SwiftAI Labs",
+              name: "CognixAI Labs",
               url: "/",
-              logo: "/swiftai-labs-logo.jpg",
+              logo: "/images/logo.png",
             },
             {
               "@context": "https://schema.org",
               "@type": "Service",
               serviceType: "AI Automation Solutions",
-              provider: { "@type": "Organization", name: "SwiftAI Labs" },
+              provider: { "@type": "Organization", name: "CognixAI Labs" },
               areaServed: "Global",
               description:
                 "Custom AI automations for business workflow automation to streamline workflows and accelerate growth.",

@@ -3,8 +3,15 @@ export default function SiteFooter() {
     <footer className="border-t border-[color:var(--border)] bg-[color:var(--section-dark)] text-[color:var(--text)]">
       <div className="mx-auto max-w-6xl px-4 py-10 grid gap-8 md:grid-cols-3">
         <div>
-          <p className="font-semibold text-[color:var(--text-strong)]">SwiftAI Labs</p>
-          <p className="mt-2 text-sm text-[color:var(--text-muted)]">Cinematic AI automations for modern teams.</p>
+          <div className="flex items-center space-x-2 mb-2">
+            <img 
+              src="/images/logo.png" 
+              alt="CognixAI Labs" 
+              className="h-6 w-auto"
+            />
+            <p className="font-semibold text-[color:var(--text-strong)]">CognixAI Labs</p>
+          </div>
+          <p className="text-sm text-[color:var(--text-muted)]">Cinematic AI automations for modern teams.</p>
         </div>
         <nav aria-label="Footer">
           <ul className="grid gap-2 text-sm text-[color:var(--text)]">
@@ -47,7 +54,7 @@ export default function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-[color:var(--border)] py-4 text-center text-xs text-[color:var(--text-muted)]">
-        © {new Date().getFullYear()} SwiftAI Labs. All rights reserved.
+        © {new Date().getFullYear()} CognixAI Labs. All rights reserved.
       </div>
     </footer>
   )

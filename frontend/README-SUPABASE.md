@@ -1,4 +1,4 @@
-Supabase setup
+CognixAI Labs - Supabase Setup
 
 1) Create a Supabase project and copy keys
    - NEXT_PUBLIC_SUPABASE_URL
@@ -22,7 +22,7 @@ create policy "allow inserts from service role" on public.contact_submissions fo
 ```
 
 3) Environment variables
-   - Set variables in `.env.local` in `frontend/` as described above and restart dev server.
+   - Set variables in `.env` in `frontend/` as described above and restart dev server.
 
 
 

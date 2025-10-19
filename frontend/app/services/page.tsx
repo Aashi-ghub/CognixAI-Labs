@@ -1,4 +1,16 @@
 import Header from "@/components/header"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "AI Automation Services",
+  description: "Discover our comprehensive AI automation services including workflow automation, AI-driven reporting, chatbot solutions, and automation consulting for businesses.",
+  keywords: ["AI automation services", "workflow automation", "AI reporting", "chatbot solutions", "automation consulting", "business automation"],
+  openGraph: {
+    title: "AI Automation Services | CognixAI Labs",
+    description: "Discover our comprehensive AI automation services including workflow automation, AI-driven reporting, chatbot solutions, and automation consulting for businesses.",
+    type: "website",
+  },
+}
 
 export default function ServicesPage() {
   return (
@@ -11,7 +23,7 @@ export default function ServicesPage() {
           <p className="text-xs uppercase tracking-[0.22em] text-[color:var(--brand)] mb-3">Our Services</p>
           <h1 className="text-balance text-4xl md:text-6xl font-semibold leading-tight">Bespoke AI Automation for Agencies & Businesses</h1>
           <p className="mt-4 max-w-3xl text-[15px] md:text-lg leading-relaxed">
-            SwiftAI Labs delivers tailor-made automation solutions to help marketing agencies, startups, and business
+            CognixAI Labs delivers tailor-made automation solutions to help marketing agencies, startups, and business
             teams scale faster, reduce manual workload, and unlock new growth. We blend the speed of AI with proven
             consulting to accelerate your operations.
           </p>

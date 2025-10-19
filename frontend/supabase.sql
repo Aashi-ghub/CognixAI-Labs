@@ -7,8 +7,13 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   email text unique,
   full_name text,
+  first_name text,
+  last_name text,
+  company text,
+  phone text,
   avatar_url text,
-  created_at timestamptz default now()
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
 );
 
 alter table public.profiles enable row level security;
@@ -21,9 +26,35 @@ create policy "Insert own profile" on public.profiles for insert with check (aut
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, email)
-  values (new.id, new.email)
-  on conflict (id) do nothing;
+  insert into public.profiles (
+    id, 
+    email, 
+    first_name, 
+    last_name, 
+    company, 
+    phone,
+    full_name
+  )
+  values (
+    new.id, 
+    new.email,
+    new.raw_user_meta_data->>'first_name',
+    new.raw_user_meta_data->>'last_name',
+    new.raw_user_meta_data->>'company',
+    new.raw_user_meta_data->>'phone',
+    concat(
+      coalesce(new.raw_user_meta_data->>'first_name', ''),
+      ' ',
+      coalesce(new.raw_user_meta_data->>'last_name', '')
+    )
+  )
+  on conflict (id) do update set
+    first_name = coalesce(excluded.first_name, profiles.first_name),
+    last_name = coalesce(excluded.last_name, profiles.last_name),
+    company = coalesce(excluded.company, profiles.company),
+    phone = coalesce(excluded.phone, profiles.phone),
+    full_name = coalesce(excluded.full_name, profiles.full_name),
+    updated_at = now();
   return new;
 end;
 $$ language plpgsql security definer;
