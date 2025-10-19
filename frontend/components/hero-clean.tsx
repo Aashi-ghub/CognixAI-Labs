@@ -50,13 +50,7 @@ export default function HeroClean() {
       className="relative min-h-[100svh] bg-[color:var(--surface)] text-[color:var(--bg)] overflow-hidden"
       aria-label="Hero"
     >
-      {/* Vignette and soft radial teal glow for cinematic look */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_40%_at_50%_20%,rgba(0,230,195,0.18),transparent_60%)]" />
-      <div className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
-      <div
-        ref={glowRef}
-        className="pointer-events-none absolute -inset-20 opacity-30 blur-3xl bg-[radial-gradient(40%_30%_at_60%_30%,rgba(0,230,195,0.25),transparent_60%)] transition-transform duration-300"
-      />
+      {/* Background accents removed per request */}
 
       <div className="relative mx-auto max-w-6xl px-4 flex items-center justify-center min-h-[100svh]">
         <div className="max-w-2xl text-center">
