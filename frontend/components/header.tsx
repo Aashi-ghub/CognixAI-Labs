@@ -17,12 +17,15 @@ export default function Header() {
     <>
       <header className="absolute inset-x-0 top-0 z-50 bg-transparent">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <a href={getUrl.home()} className="flex items-center">
+          <a href={getUrl.home()} className="flex items-center space-x-2">
             <img 
               src="/images/logo.png" 
               alt="CognixAI Labs" 
               className="h-8 w-auto"
             />
+            <span className="font-semibold tracking-tight text-[color:var(--bg)]">
+              CognixAI Labs
+            </span>
           </a>
           <nav className="hidden md:flex items-center gap-5 md:ml-auto md:justify-end">
             <a href={getUrl.route("/services")} className="text-[color:var(--bg)] hover:opacity-80 transition">
