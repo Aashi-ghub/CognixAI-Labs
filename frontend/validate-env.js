@@ -67,3 +67,4 @@ try {
 } catch (error) {
   console.error('❌ Error reading .env file:', error.message)
 }
+

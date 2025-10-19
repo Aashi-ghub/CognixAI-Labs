@@ -35,11 +35,28 @@ export default function SiteFooter() {
                 Contact
               </a>
             </li>
+            <li>
+              <a href="/privacy" className="hover:text-[color:var(--text-strong)]">
+                Privacy Policy
+              </a>
+            </li>
+            <li>
+              <a href="/terms" className="hover:text-[color:var(--text-strong)]">
+                Terms of Service
+              </a>
+            </li>
+            <li>
+              <a href="/cookies" className="hover:text-[color:var(--text-strong)]">
+                Cookies Policy
+              </a>
+            </li>
           </ul>
         </nav>
         <div>
           <p className="text-sm text-[color:var(--text-muted)]">Contact</p>
-          <p className="text-sm text-[color:var(--text)]">hello@example.com</p>
+          <p className="text-sm text-[color:var(--text)]">
+            <a href="mailto:hello@cognixailabs.com" className="hover:text-[color:var(--text-strong)]">hello@cognixailabs.com</a>
+          </p>
           <div className="mt-4 flex gap-3 text-sm">
             <a href="#" aria-label="LinkedIn" className="hover:text-[color:var(--text-strong)]">
               LinkedIn
