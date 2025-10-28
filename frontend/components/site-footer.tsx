@@ -21,7 +21,7 @@ export default function SiteFooter() {
               </a>
             </li>
             <li>
-              <a href="#about" className="hover:text-[color:var(--text-strong)]">
+              <a href="/about" className="hover:text-[color:var(--text-strong)]">
                 About
               </a>
             </li>
