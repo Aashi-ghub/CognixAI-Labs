@@ -4,15 +4,7 @@ import { ScrollReveal } from "./scroll-reveal"
 export default function AutomationCommandCenter() {
   return (
     <section className="bg-white" aria-labelledby="automation-command-center-heading">
-      <div className="mx-auto max-w-6xl px-4 py-20">
-        <div className="text-center max-w-3xl mx-auto">
-          <h2 id="automation-command-center-heading" className="text-3xl md:text-4xl font-semibold tracking-tight" style={{ color: "#000" }}>
-            The Automation Command Center
-          </h2>
-          <p className="mt-3 text-base md:text-lg text-[color:var(--text-muted)]">
-            See how your entire workflow runs on autopilot — from lead capture to scheduling, follow-ups, and analytics — all powered by AI.
-          </p>
-        </div>
+      <div className="mx-auto max-w-6xl px-4 pt-8 pb-24">
 
         <div className="mt-10 grid gap-10 md:grid-cols-2 items-center">
           <ScrollReveal>
@@ -43,7 +35,9 @@ export default function AutomationCommandCenter() {
 
           <ScrollReveal delayMs={100} className="md:pl-2">
             <div className="max-w-prose md:mx-0 mx-auto">
-              <h3 className="text-xl md:text-2xl font-semibold" style={{ color: "#000" }}>Operate your business on autopilot</h3>
+              <h2 id="automation-command-center-heading" className="text-2xl md:text-3xl font-semibold tracking-tight" style={{ color: "#000" }}>
+                The Automation Command Center
+              </h2>
               <p className="mt-3 text-sm md:text-base leading-7 text-slate-700 md:text-slate-800">
                 Orchestrate end-to-end workflows from a single command center. Monitor status, trigger actions,
                 and review outcomes — all with AI agents collaborating in real time.

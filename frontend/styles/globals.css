@@ -123,3 +123,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Flow diagram animations for HowToGetStarted */
+.flow-path {
+  stroke-dasharray: 6 16;
+  stroke-linecap: round;
+  animation: flow 4s linear infinite;
+}
+.flow-path-delayed {
+  stroke-dasharray: 6 16;
+  stroke-linecap: round;
+  animation: flow 5s linear infinite 0.6s;
+}
+@keyframes flow {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -220; }
+}
+.node-pulse { animation: nodePulse 3.6s ease-in-out infinite; }
+.node-pulse-strong { animation: nodePulse 2.8s ease-in-out infinite; }
+@keyframes nodePulse {
+  0%, 100% { opacity: 0.95; filter: drop-shadow(0 0 12px rgba(0,230,195,0.35)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 22px rgba(138,91,255,0.45)); }
+}

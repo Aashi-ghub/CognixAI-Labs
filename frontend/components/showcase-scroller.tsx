@@ -76,6 +76,11 @@ export default function ShowcaseScroller() {
       style={{ height: `${panels.length * 100}vh` }}
     >
       <div className="sticky top-0 h-[100svh] overflow-hidden bg-[color:var(--charcoal)]">
+        {/* Curved top divider to blend from light section into dark showcase */}
+        {/* Separator curve now rendered in Hero section */}
+        {/* Gradient overlay to blend with adjacent sections */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/40 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent" />
         <div className="absolute inset-0 flex items-center">
           <div
             className="flex h-full w-[calc(100vw*4)] transition-transform will-change-transform"
@@ -183,13 +188,13 @@ export default function ShowcaseScroller() {
                           href="#contact"
                           className="rounded-full bg-[color:var(--brand)] px-4 py-2 text-sm font-medium text-[color:var(--on-brand)]"
                         >
-                          Request this solution
+                          Automate My Sales
                         </a>
                         <a
                           href="#contact"
                           className="rounded-full border border-[color:var(--border)] px-4 py-2 text-sm text-[color:var(--text-strong)]"
                         >
-                          Get a custom demo
+                          Talk to an AI Consultant
                         </a>
                       </div>
                     </div>

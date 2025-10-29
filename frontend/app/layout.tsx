@@ -5,6 +5,7 @@ import { Suspense } from "react"
 import { AuthProvider } from "../lib/auth-context"
 import DynamicFavicon from "../components/dynamic-favicon"
 import Header from "../components/header"
+import ConsultationPopup from "../components/consultation-popup"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -97,6 +98,8 @@ export default function RootLayout({
         <DynamicFavicon />
         <AuthProvider>
           <Header />
+          {/* Timed consultation popup site-wide */}
+          <ConsultationPopup />
           <Suspense fallback={null}>{children}</Suspense>
         </AuthProvider>
         <Analytics />

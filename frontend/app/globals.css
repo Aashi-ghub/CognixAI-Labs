@@ -446,6 +446,15 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Utility to hide scrollbars where we auto-size content */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
 /* Keyframes for testimonial stack-in animation */
 @keyframes stackIn {
   from {
