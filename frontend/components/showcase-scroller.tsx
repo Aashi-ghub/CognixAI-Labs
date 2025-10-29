@@ -44,6 +44,11 @@ export default function ShowcaseScroller() {
 
   const containerRef = useRef<HTMLDivElement>(null)
   const [progress, setProgress] = useState(0) // 0 → 1 across the section
+  // Track per-video mute state; default all to true (muted)
+  const [mutedById, setMutedById] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(panels.map((p) => [p.id, true])) as Record<string, boolean>,
+  )
+  const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({})
 
   useEffect(() => {
     const container = containerRef.current
@@ -84,15 +89,53 @@ export default function ShowcaseScroller() {
                     {p.videoSrc ? (
                       <div className="relative w-full max-w-2xl aspect-video rounded-lg overflow-hidden shadow-lg">
                         <video
+                          ref={(el) => {
+                            videoRefs.current[p.id] = el
+                          }}
                           className="w-full h-full object-cover"
                           autoPlay
-                          muted
+                          muted={mutedById[p.id] ?? true}
                           loop
                           playsInline
                         >
                           <source src={p.videoSrc} type="video/mp4" />
                           Your browser does not support the video tag.
                         </video>
+                        <button
+                          type="button"
+                          aria-label={(mutedById[p.id] ?? true) ? "Unmute video" : "Mute video"}
+                          onClick={() => {
+                            setMutedById((prev) => {
+                              const next = { ...prev, [p.id]: !(prev[p.id] ?? true) }
+                              // If unmuting, ensure playback continues
+                              const v = videoRefs.current[p.id]
+                              if (v) {
+                                v.muted = next[p.id]
+                                if (!next[p.id]) {
+                                  // user gesture initiated; play should succeed
+                                  v.play().catch(() => {})
+                                }
+                              }
+                              return next
+                            })
+                          }}
+                          className="absolute bottom-2 right-2 h-9 w-9 grid place-items-center rounded-full border border-[color:var(--border)] bg-[color:var(--bg-elevated-solid)]/80 backdrop-blur text-[color:var(--text-strong)] shadow-sm hover:bg-[color:var(--bg-elevated-solid)] focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"
+                        >
+                          {(mutedById[p.id] ?? true) ? (
+                            // Mute icon (speaker with X)
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                              <path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/>
+                              <path d="M16 9l5 5m0-5l-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          ) : (
+                            // Volume icon (speaker with waves)
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                              <path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/>
+                              <path d="M16.5 8.5c1.38 1.38 1.38 5.62 0 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                              <path d="M19.5 6c2.7 2.7 2.7 9.3 0 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                            </svg>
+                          )}
+                        </button>
                       </div>
                     ) : (
                       <div className="w-full max-w-2xl aspect-video rounded-lg border border-[color:var(--border)] bg-[color:var(--bg-elevated)] grid place-items-center text-[color:var(--text-muted)] text-sm">
