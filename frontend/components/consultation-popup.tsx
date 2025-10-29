@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 // Using external free API (Clearbit autocomplete) for company suggestions
 import { cn } from "@/lib/utils"
+import { CheckCircle2 } from "lucide-react"
 
 interface ConsultationPopupProps {
   delayMs?: number
@@ -231,8 +232,11 @@ export default function ConsultationPopup({ delayMs = 20000 }: ConsultationPopup
             </div>
           )}
           {status === "sent" && (
-            <div className="text-[var(--color-accent,#18e2a5)] text-sm">
-              Thanks! We’ll be in touch shortly.
+            <div className="flex items-start gap-2 rounded-md border border-[color:var(--brand,#18e2a5)]/30 bg-[color:var(--brand,#18e2a5)]/10 px-3 py-2 text-sm">
+              <CheckCircle2 className="shrink-0 text-[color:var(--brand,#18e2a5)]" />
+              <div className="text-white/90">
+                Thank you! We’ll contact you soon to schedule your call.
+              </div>
             </div>
           )}
 

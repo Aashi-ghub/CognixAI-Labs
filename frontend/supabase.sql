@@ -64,6 +64,30 @@ create trigger on_auth_user_created
 after insert on auth.users
 for each row execute function public.handle_new_user();
 
+-- Consultation requests captured from timed popup form
+create table if not exists public.consultation_requests (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  contact text not null, -- email or phone
+  company text,
+  goal text not null, -- automation goal description
+  created_at timestamptz default now()
+);
+
+alter table public.consultation_requests enable row level security;
+
+-- Inserts are performed by the server route using the service role key
+do $$ begin
+  if not exists (
+    select 1 from pg_policies where schemaname = 'public' and tablename = 'consultation_requests' and policyname = 'allow inserts for authenticated'
+  ) then
+    create policy "allow inserts for authenticated" on public.consultation_requests
+    for insert
+    to authenticated
+    with check (true);
+  end if;
+end $$;
+
 -- Contact submissions table (write by server only)
 create table if not exists public.contact_submissions (
   id uuid primary key default gen_random_uuid(),

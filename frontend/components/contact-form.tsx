@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { CheckCircle2 } from "lucide-react"
 
 import { useEffect, useState } from "react"
 
@@ -166,7 +167,12 @@ export default function ContactForm() {
             >
               {status === "sending" ? "Sending..." : "Submit"}
             </button>
-            {status === "sent" && <span className="text-sm text-[color:var(--brand)]">Thanks! We’ll be in touch.</span>}
+            {status === "sent" && (
+              <span className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--brand)]/30 bg-[color:var(--brand)]/10 px-3 py-2 text-sm text-black">
+                <CheckCircle2 className="text-[color:var(--brand)]" />
+                Thank you! We’ll contact you soon.
+              </span>
+            )}
             {status === "error" && <span className="text-sm text-red-400">Something went wrong.</span>}
           </div>
         </form>
