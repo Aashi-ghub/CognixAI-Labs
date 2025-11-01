@@ -2,7 +2,7 @@
 import ScrollGlassNav from "./scroll-glass-nav"
 import { useAuth } from "../lib/auth-context"
 import { useRouter } from "next/navigation"
-import { getUrl } from "../lib/config"
+import Link from "next/link"
 
 export default function Header() {
   const { user, signOut } = useAuth()
@@ -10,14 +10,14 @@ export default function Header() {
 
   const handleLogout = async () => {
     await signOut()
-    router.push(getUrl.home())
+    router.push("/")
   }
 
   return (
     <>
       <header className="absolute inset-x-0 top-0 z-50 bg-transparent">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-          <a href={getUrl.home()} className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <img 
               src="/images/logo.png" 
               alt="CognixAI Labs" 
@@ -26,22 +26,22 @@ export default function Header() {
             <span className="font-semibold tracking-tight text-[color:var(--bg)]">
               CognixAI Labs
             </span>
-          </a>
+          </Link>
           <nav className="hidden md:flex items-center gap-5 md:ml-auto md:justify-end">
-            <a href={getUrl.route("/services")} className="text-[color:var(--bg)] hover:opacity-80 transition">
+            <Link href="/services" className="text-[color:var(--bg)] hover:opacity-80 transition">
               Services
-            </a>
+            </Link>
             <a href="#demo" className="text-[color:var(--bg)] hover:opacity-80 transition">
               Demo
             </a>
             {user ? (
               <div className="flex items-center gap-3">
-                <a 
-                  href={getUrl.dashboard()} 
+                <Link 
+                  href="/dashboard" 
                   className="text-[color:var(--bg)] hover:opacity-80 transition text-sm"
                 >
                   Dashboard
-                </a>
+                </Link>
                 <span className="text-[color:var(--bg)] text-sm">
                   {user.email}
                 </span>
@@ -53,12 +53,12 @@ export default function Header() {
                 </button>
               </div>
             ) : (
-              <a
-                href={getUrl.login()}
+              <Link
+                href="/login"
                 className="text-[color:var(--bg)] hover:opacity-80 transition"
               >
                 Login
-              </a>
+              </Link>
             )}
             <a
               href="#contact"

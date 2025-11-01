@@ -6,5 +6,6 @@ export async function GET(request: NextRequest) {
   // when detectSessionInUrl is enabled (which we set in supabase-client.ts)
   
   // Redirect to home page after successful authentication using centralized config
-  return NextResponse.redirect(getUrl.home())
+  // Pass the request to getUrl.home() so it can extract the correct origin from headers
+  return NextResponse.redirect(getUrl.home(request))
 }

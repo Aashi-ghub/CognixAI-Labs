@@ -1,15 +1,46 @@
+import { NextRequest } from 'next/server'
+
+// Helper function to get base URL - works on both client and server
+function getBaseUrl(request?: NextRequest): string {
+  // Priority 1: Use environment variable if set
+  if (process.env.NEXT_PUBLIC_BASE_URL) {
+    return process.env.NEXT_PUBLIC_BASE_URL
+  }
+  
+  // Priority 2: On server side, extract from request URL or headers
+  if (request) {
+    // Try to get from request URL first (most reliable)
+    try {
+      const url = new URL(request.url)
+      return url.origin
+    } catch {
+      // Fallback to headers if URL parsing fails
+      const host = request.headers.get('host') || request.headers.get('x-forwarded-host')
+      if (host) {
+        // Determine protocol from headers, default to https for production-like environments
+        const forwardedProto = request.headers.get('x-forwarded-proto')
+        const protocol = forwardedProto || (host.includes('localhost') ? 'http' : 'https')
+        return `${protocol}://${host}`
+      }
+    }
+  }
+  
+  // Priority 3: On client side, use window.location
+  if (typeof window !== 'undefined') {
+    return window.location.origin
+  }
+  
+  // Priority 4: Fallback (should rarely be used)
+  return 'http://localhost:3000'
+}
+
 // Centralized configuration for URLs and environment variables
 export const config = {
-  // Base URL configuration - defaults to current origin
-  baseUrl: (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'),
-  
   // Production URL for reference
   productionUrl: 'https://cognixai-labs.vercel.app',
   
   // API endpoints
   api: {
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || 
-             (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'),
     auth: {
       callback: '/auth/callback',
       login: '/login',
@@ -38,20 +69,20 @@ export const config = {
 
 // Helper functions for URL construction
 export const getUrl = {
-  // Get full URL for a route
-  route: (path: string) => `${config.baseUrl}${path}`,
+  // Get full URL for a route (supports optional request for server-side)
+  route: (path: string, request?: NextRequest) => `${getBaseUrl(request)}${path}`,
   
   // Get auth callback URL
-  authCallback: () => `${config.baseUrl}${config.routes.auth.callback}`,
+  authCallback: (request?: NextRequest) => `${getBaseUrl(request)}${config.routes.auth.callback}`,
   
   // Get login URL
-  login: () => `${config.baseUrl}${config.routes.login}`,
+  login: (request?: NextRequest) => `${getBaseUrl(request)}${config.routes.login}`,
   
   // Get dashboard URL
-  dashboard: () => `${config.baseUrl}${config.routes.dashboard}`,
+  dashboard: (request?: NextRequest) => `${getBaseUrl(request)}${config.routes.dashboard}`,
   
   // Get home URL
-  home: () => `${config.baseUrl}${config.routes.home}`
+  home: (request?: NextRequest) => `${getBaseUrl(request)}${config.routes.home}`
 }
 
 // Environment validation - only run on client side or when explicitly called
@@ -86,6 +117,6 @@ export const validateConfig = () => {
   return true
 }
 
-// Export the base URL for easy access
-export const BASE_URL = config.baseUrl
+// Export the base URL for easy access (client-side only)
+export const BASE_URL = getBaseUrl()
 export const AUTH_CALLBACK_URL = getUrl.authCallback()
