@@ -25,7 +25,55 @@ create policy "Insert own profile" on public.profiles for insert with check (aut
 -- Function to auto-create profile on user signup
 create or replace function public.handle_new_user()
 returns trigger as $$
+declare
+  v_full_name text;
+  v_first_name text;
+  v_last_name text;
+  v_given_name text;
+  v_family_name text;
+  v_name_from_google text;
 begin
+  -- Extract names from various sources (supports both email signup and Google OAuth)
+  v_given_name := coalesce(new.raw_user_meta_data->>'given_name', new.raw_user_meta_data->>'first_name');
+  v_family_name := coalesce(new.raw_user_meta_data->>'family_name', new.raw_user_meta_data->>'last_name');
+  v_name_from_google := coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name');
+  
+  -- Determine full_name: prefer Google's full_name/name, then construct from parts
+  if v_name_from_google is not null and v_name_from_google != '' then
+    v_full_name := v_name_from_google;
+    -- Try to split Google full_name into first_name and last_name
+    if v_given_name is null or v_given_name = '' then
+      -- Split by space: take first word as first_name, rest as last_name
+      v_first_name := split_part(v_name_from_google, ' ', 1);
+      v_last_name := trim(substring(v_name_from_google from length(v_first_name) + 1));
+      if v_last_name = '' then
+        v_last_name := null;
+      end if;
+    else
+      v_first_name := v_given_name;
+      v_last_name := v_family_name;
+    end if;
+  elsif v_given_name is not null or v_family_name is not null or 
+        (new.raw_user_meta_data->>'first_name' is not null) or 
+        (new.raw_user_meta_data->>'last_name' is not null) then
+    -- Construct from parts
+    v_first_name := coalesce(v_given_name, new.raw_user_meta_data->>'first_name');
+    v_last_name := coalesce(v_family_name, new.raw_user_meta_data->>'last_name');
+    v_full_name := trim(concat(
+      coalesce(v_first_name, ''),
+      ' ',
+      coalesce(v_last_name, '')
+    ));
+    if v_full_name = '' or v_full_name = ' ' then
+      v_full_name := null;
+    end if;
+  else
+    -- Fallback: use email username or empty
+    v_full_name := null;
+    v_first_name := null;
+    v_last_name := null;
+  end if;
+  
   insert into public.profiles (
     id, 
     email, 
@@ -33,26 +81,25 @@ begin
     last_name, 
     company, 
     phone,
+    avatar_url,
     full_name
   )
   values (
     new.id, 
     new.email,
-    new.raw_user_meta_data->>'first_name',
-    new.raw_user_meta_data->>'last_name',
+    v_first_name,
+    v_last_name,
     new.raw_user_meta_data->>'company',
     new.raw_user_meta_data->>'phone',
-    concat(
-      coalesce(new.raw_user_meta_data->>'first_name', ''),
-      ' ',
-      coalesce(new.raw_user_meta_data->>'last_name', '')
-    )
+    coalesce(new.raw_user_meta_data->>'avatar_url', new.raw_user_meta_data->>'picture'),
+    v_full_name
   )
   on conflict (id) do update set
     first_name = coalesce(excluded.first_name, profiles.first_name),
     last_name = coalesce(excluded.last_name, profiles.last_name),
     company = coalesce(excluded.company, profiles.company),
     phone = coalesce(excluded.phone, profiles.phone),
+    avatar_url = coalesce(excluded.avatar_url, profiles.avatar_url),
     full_name = coalesce(excluded.full_name, profiles.full_name),
     updated_at = now();
   return new;
@@ -71,6 +118,11 @@ create table if not exists public.consultation_requests (
   contact text not null, -- email or phone
   company text,
   goal text not null, -- automation goal description
+  -- New fields for AI Workflow Audit (3-step popup)
+  industry text, -- Industry selected (Tech, Finance, Marketing, Real Estate, Other)
+  team_size text, -- Team size selected (1-10, 10-50, 50-200, 200+)
+  challenge text, -- Biggest challenge described by user
+  wants_call boolean default false, -- Whether user wants strategy call
   created_at timestamptz default now()
 );
 

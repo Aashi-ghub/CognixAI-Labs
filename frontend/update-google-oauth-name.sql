@@ -1,16 +1,7 @@
--- Update existing profiles table to add new columns
+-- Migration: Update handle_new_user function to properly extract full_name from Google OAuth
 -- Run this in your Supabase SQL Editor
+-- This ensures Google OAuth users get their full_name properly saved
 
--- Add new columns to profiles table
-ALTER TABLE public.profiles 
-ADD COLUMN IF NOT EXISTS first_name text,
-ADD COLUMN IF NOT EXISTS last_name text,
-ADD COLUMN IF NOT EXISTS company text,
-ADD COLUMN IF NOT EXISTS phone text,
-ADD COLUMN IF NOT EXISTS updated_at timestamptz default now();
-
--- Update the handle_new_user function to save additional user data
--- Now supports both email signup and Google OAuth with proper full_name extraction
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 DECLARE
@@ -94,17 +85,45 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Verify the trigger exists (it should already exist from the original setup)
--- If not, uncomment the lines below:
--- DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
--- CREATE TRIGGER on_auth_user_created
--- AFTER INSERT ON auth.users
--- FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+-- Update existing users who logged in with Google but don't have full_name
+-- This backfills missing full_name for existing Google OAuth users
+UPDATE public.profiles p
+SET 
+  full_name = COALESCE(
+    (SELECT raw_user_meta_data->>'full_name' FROM auth.users WHERE id = p.id),
+    (SELECT raw_user_meta_data->>'name' FROM auth.users WHERE id = p.id),
+    p.full_name
+  ),
+  first_name = COALESCE(
+    p.first_name,
+    (SELECT split_part(COALESCE(raw_user_meta_data->>'full_name', raw_user_meta_data->>'name', ''), ' ', 1) 
+     FROM auth.users WHERE id = p.id)
+  ),
+  last_name = COALESCE(
+    p.last_name,
+    (SELECT trim(substring(COALESCE(raw_user_meta_data->>'full_name', raw_user_meta_data->>'name', '') 
+      FROM length(split_part(COALESCE(raw_user_meta_data->>'full_name', raw_user_meta_data->>'name', ''), ' ', 1)) + 1))
+     FROM auth.users WHERE id = p.id)
+  ),
+  avatar_url = COALESCE(
+    p.avatar_url,
+    (SELECT raw_user_meta_data->>'avatar_url' FROM auth.users WHERE id = p.id),
+    (SELECT raw_user_meta_data->>'picture' FROM auth.users WHERE id = p.id)
+  )
+WHERE 
+  p.full_name IS NULL 
+  AND EXISTS (
+    SELECT 1 FROM auth.users u 
+    WHERE u.id = p.id 
+    AND (u.raw_user_meta_data->>'full_name' IS NOT NULL 
+         OR u.raw_user_meta_data->>'name' IS NOT NULL)
+  );
 
--- Test the function by checking if it exists
+-- Verify the function was updated
 SELECT 
   routine_name, 
   routine_type 
 FROM information_schema.routines 
 WHERE routine_name = 'handle_new_user' 
 AND routine_schema = 'public';
+

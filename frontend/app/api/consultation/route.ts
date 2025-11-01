@@ -11,12 +11,43 @@ export async function POST(req: Request) {
     const supabase = createClient(supabaseUrl, serviceKey)
 
     const body = await req.json()
-    const { name, contact, company, goal } = body || {}
+    const { name, contact, company, goal, industry, teamSize, challenge, wantsCall } = body || {}
+    
+    // Handle both old and new formats
+    if (industry && teamSize && challenge) {
+      // New format: AI Workflow Audit - use new structured fields
+      const goalText = goal || `AI Workflow Audit - Industry: ${industry}, Team Size: ${teamSize}, Challenge: ${challenge}${wantsCall ? " - Wants Strategy Call" : ""}`
+      const { error } = await supabase.from("consultation_requests").insert({ 
+        name: name || "AI Audit Lead", 
+        contact: contact || "via-popup", 
+        company: company || null, 
+        goal: goalText,
+        industry: industry,
+        team_size: teamSize,
+        challenge: challenge,
+        wants_call: wantsCall === true
+      })
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 })
+      }
+      return NextResponse.json({ ok: true })
+    }
+    
+    // Old format (backward compatibility)
     if (!name || !contact || !goal) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const { error } = await supabase.from("consultation_requests").insert({ name, contact, company, goal })
+    const { error } = await supabase.from("consultation_requests").insert({ 
+      name, 
+      contact, 
+      company, 
+      goal,
+      industry: null,
+      team_size: null,
+      challenge: null,
+      wants_call: false
+    })
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }

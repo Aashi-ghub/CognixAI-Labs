@@ -3,6 +3,16 @@ import ScrollGlassNav from "./scroll-glass-nav"
 import { useAuth } from "../lib/auth-context"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu"
+import { Settings, ShoppingBag, LogOut, User } from "lucide-react"
 
 export default function Header() {
   const { user, signOut } = useAuth()
@@ -11,6 +21,24 @@ export default function Header() {
   const handleLogout = async () => {
     await signOut()
     router.push("/")
+  }
+
+  const handleProtectedNavigation = (path: string, e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault()
+      router.push("/login")
+      return
+    }
+  }
+
+  const getInitials = (email: string) => {
+    return email
+      .split("@")[0]
+      .split(".")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2)
   }
 
   return (
@@ -35,23 +63,57 @@ export default function Header() {
               Demo
             </a>
             {user ? (
-              <div className="flex items-center gap-3">
-                <Link 
-                  href="/dashboard" 
-                  className="text-[color:var(--bg)] hover:opacity-80 transition text-sm"
-                >
-                  Dashboard
-                </Link>
-                <span className="text-[color:var(--bg)] text-sm">
-                  {user.email}
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="text-[color:var(--bg)] hover:opacity-80 transition text-sm"
-                >
-                  Logout
-                </button>
-              </div>
+              <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="outline-none focus:outline-none">
+                      <Avatar className="h-8 w-8 cursor-pointer hover:opacity-80 transition">
+                        <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email || ""} />
+                        <AvatarFallback className="bg-teal-500/20 text-[color:var(--bg)] text-xs font-semibold">
+                          {user.email ? getInitials(user.email) : <User className="h-4 w-4" />}
+                        </AvatarFallback>
+                      </Avatar>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">My Account</p>
+                        <p className="text-xs leading-none text-muted-foreground truncate">
+                          {user.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link 
+                        href="/dashboard/settings" 
+                        onClick={(e) => handleProtectedNavigation("/dashboard/settings", e)}
+                        className="cursor-pointer"
+                      >
+                        <Settings className="mr-2 h-4 w-4" />
+                        Settings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link 
+                        href="/dashboard/purchases"
+                        onClick={(e) => handleProtectedNavigation("/dashboard/purchases", e)}
+                        className="cursor-pointer"
+                      >
+                        <ShoppingBag className="mr-2 h-4 w-4" />
+                        My Purchases
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={handleLogout}
+                      className="cursor-pointer text-destructive focus:text-destructive"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
             ) : (
               <Link
                 href="/login"
