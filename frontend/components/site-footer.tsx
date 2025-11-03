@@ -5,7 +5,7 @@ export default function SiteFooter() {
         <div>
           <div className="flex items-center space-x-2 mb-2">
             <img 
-              src="/images/logo.png" 
+              src="/images/white logo.png" 
               alt="CognixAI Labs" 
               className="h-6 w-auto"
             />

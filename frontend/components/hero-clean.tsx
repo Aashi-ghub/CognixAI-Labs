@@ -1,6 +1,9 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import dynamic from "next/dynamic"
+const Hyperspeed = dynamic(() => import("./Hyperspeed"), { ssr: false })
+import { hyperspeedPresets } from "./Hyperspeed"
 
 export default function HeroClean() {
   const glowRef = useRef<HTMLDivElement>(null)
@@ -50,36 +53,25 @@ export default function HeroClean() {
       className="relative min-h-[100svh] bg-[color:var(--surface)] text-[color:var(--bg)] overflow-hidden"
       aria-label="Hero"
     >
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50 to-gray-100" />
-      
-      {/* Floating geometric shapes */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-br from-[color:var(--brand)]/20 to-cyan-400/20 rounded-full blur-xl animate-pulse" />
-      <div className="absolute top-40 right-20 w-32 h-32 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-2xl animate-pulse delay-1000" />
-      <div className="absolute bottom-40 left-1/4 w-16 h-16 bg-gradient-to-br from-[color:var(--brand)]/30 to-emerald-400/30 rounded-full blur-lg animate-pulse delay-500" />
-      <div className="absolute bottom-20 right-1/3 w-24 h-24 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-xl animate-pulse delay-700" />
-      
-      {/* Subtle grid pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
-      
-      {/* Animated gradient orbs */}
-      <div className="absolute top-1/4 left-1/3 w-64 h-64 bg-gradient-to-r from-[color:var(--brand)]/10 to-cyan-400/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-pulse delay-1000" />
+      {/* Hyperspeed Background - interactive (click & hold) */}
+      <div className="absolute inset-0 z-0">
+        <Hyperspeed effectOptions={hyperspeedPresets.one} />
+      </div>
 
-      <div className="relative mx-auto max-w-6xl px-4 flex items-center justify-center min-h-[100svh]">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 flex items-center justify-center min-h-[100svh]">
         <div className="w-full text-center">
           <p className="text-xs uppercase tracking-[0.22em] text-[color:var(--brand)] mb-3">
             Automation. Intelligence. Scale.
           </p>
           <h1
             ref={h1Ref}
-            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight text-center opacity-0 translate-y-2 transition-all duration-700 will-change-transform bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 bg-clip-text text-transparent"
+            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight text-center opacity-0 translate-y-2 transition-all duration-700 will-change-transform text-white"
           >
             Turn your business into<br />
             <span className="bg-gradient-to-r from-[color:var(--brand)] to-cyan-500 bg-clip-text text-transparent whitespace-nowrap">an automated powerhouse</span>
           </h1>
 
-          <h2 className="mt-6 text-xl md:text-2xl leading-relaxed text-gray-700 font-medium">
+          <h2 className="mt-6 text-xl md:text-2xl leading-relaxed text-white font-medium">
             Build. Launch. Scale. All with AI automation.
           </h2>
 
@@ -97,7 +89,7 @@ export default function HeroClean() {
             <a
               href="#strategy"
               aria-label="Book Strategy Call"
-              className="rounded-full border border-[color:var(--border)] px-5 py-2.5 text-sm font-medium text-[color:var(--bg)] hover:bg-[color:var(--bg-elevated)]"
+              className="rounded-full border border-[color:var(--border)] px-5 py-2.5 text-sm font-medium text-white hover:bg-[color:var(--bg-elevated)]"
             >
               Book Strategy Call
             </a>

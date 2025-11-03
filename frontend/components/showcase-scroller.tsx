@@ -28,7 +28,7 @@ export default function ShowcaseScroller() {
       },
       {
         id: "smart-quote-ai",
-        title: "Smart Quote AI",
+        title: "AutoQuote AI",
         description: "Automate quote generation from inquiries, instantly and accurately. Extracts customer requirements, applies pricing logic, and generates ready-to-send quotes in seconds.",
         videoSrc: "/smartquote.mp4",
       },
@@ -49,6 +49,7 @@ export default function ShowcaseScroller() {
     Object.fromEntries(panels.map((p) => [p.id, true])) as Record<string, boolean>,
   )
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({})
+  const [activePanelId, setActivePanelId] = useState<string | null>(null)
 
   useEffect(() => {
     const container = containerRef.current
@@ -64,6 +65,32 @@ export default function ShowcaseScroller() {
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
+
+  // Set active panel from scroll progress (more reliable for horizontal scroller)
+  useEffect(() => {
+    const maxIndex = panels.length - 1
+    const approximateIndex = Math.round(progress * maxIndex)
+    const clampedIndex = Math.max(0, Math.min(maxIndex, approximateIndex))
+    const nextId = panels[clampedIndex]?.id ?? null
+    if (nextId && nextId !== activePanelId) {
+      setActivePanelId(nextId)
+    }
+  }, [progress, panels, activePanelId])
+
+  // Ensure only the active panel's video is playing; pause others
+  useEffect(() => {
+    const entries = Object.entries(videoRefs.current)
+    for (const [id, v] of entries) {
+      if (!v) continue
+      if (id === activePanelId) {
+        // Attempt to play active video (allowed even unmuted after user gesture)
+        v.play().catch(() => {})
+      } else {
+        // Pause all non-active videos to prevent overlapping audio
+        try { v.pause() } catch {}
+      }
+    }
+  }, [activePanelId])
 
   const translateX = `translateX(-${progress * (100 * (panels.length - 1))}vw)`
 
@@ -98,10 +125,12 @@ export default function ShowcaseScroller() {
                             videoRefs.current[p.id] = el
                           }}
                           className="w-full h-full object-cover"
-                          autoPlay
+                          // Avoid mass autoplay; we control play/pause via IntersectionObserver
+                          // Autoplay not set; playback is managed in effect when panel is active
                           muted={mutedById[p.id] ?? true}
                           loop
                           playsInline
+                          preload="metadata"
                         >
                           <source src={p.videoSrc} type="video/mp4" />
                           Your browser does not support the video tag.
