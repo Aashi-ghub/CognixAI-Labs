@@ -1,3 +1,5 @@
+
+
 export default function SiteFooter() {
   return (
     <footer className="border-t border-[color:var(--border)] bg-[color:var(--section-dark)] text-[color:var(--text)]">

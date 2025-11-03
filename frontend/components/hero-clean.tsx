@@ -1,5 +1,5 @@
 "use client"
-
+//use client
 import { useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 const Hyperspeed = dynamic(() => import("./Hyperspeed"), { ssr: false })

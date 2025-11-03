@@ -43,8 +43,7 @@ export default function ShowcaseScroller() {
   )
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const [progress, setProgress] = useState(0) // 0 → 1 across the section
-  // Track per-video mute state; default all to true (muted)
+  const [progress, setProgress] = useState(0)
   const [mutedById, setMutedById] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(panels.map((p) => [p.id, true])) as Record<string, boolean>,
   )

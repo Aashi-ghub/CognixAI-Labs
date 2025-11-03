@@ -1,3 +1,4 @@
+//use clients
 "use client"
 import ScrollGlassNav from "./scroll-glass-nav"
 import { useAuth } from "../lib/auth-context"

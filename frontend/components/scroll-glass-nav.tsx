@@ -7,8 +7,6 @@ export default function ScrollGlassNav() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [navStyle, setNavStyle] = useState<React.CSSProperties>({})
   const [onWhiteBg, setOnWhiteBg] = useState(false)
-
-  // Detect if nav is over a white (or near-white) background
   useEffect(() => {
     function checkNavContrast() {
       const navY = 60 // 12px (top-3) + ~48px nav height
