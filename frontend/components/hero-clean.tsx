@@ -90,14 +90,14 @@ export default function HeroClean() {
             className="mt-6 flex flex-wrap items-center justify-center gap-3"
           >
             <a
-              href="#analysis"
+              href="#contact"
               aria-label="Get Free Workflow Analysis"
               className="rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.16)]"
             >
               Get Free Workflow Analysis
             </a>
             <a
-              href="#strategy"
+              href="#contact"
               aria-label="Book Strategy Call"
               className="rounded-full border border-black px-5 py-2.5 text-sm font-medium hover:bg-neutral-100"
             >
