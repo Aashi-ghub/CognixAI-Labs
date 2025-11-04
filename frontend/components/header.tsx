@@ -48,19 +48,19 @@ export default function Header() {
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <img 
-              src="/images/white logo.png" 
+              src="/images/logo.png" 
               alt="CognixAI Labs" 
               className="h-8 w-auto"
             />
-            <span className="font-semibold tracking-tight text-white">
+            <span className="font-semibold tracking-tight">
               CognixAI Labs
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-5 md:ml-auto md:justify-end">
-            <Link href="/services" className="text-white hover:opacity-80 transition">
+            <Link href="/services" className=" hover:opacity-80 transition">
               Services
             </Link>
-            <a href="#demo" className="text-white hover:opacity-80 transition">
+            <a href="#demo" className=" hover:opacity-80 transition">
               Demo
             </a>
             {user ? (
@@ -118,7 +118,7 @@ export default function Header() {
             ) : (
               <Link
                 href="/login"
-                className="text-white hover:opacity-80 transition"
+                className="hover:opacity-80 transition"
               >
                 Login
               </Link>
