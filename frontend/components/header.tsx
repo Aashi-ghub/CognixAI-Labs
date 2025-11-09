@@ -1,3 +1,4 @@
+//use clients
 "use client"
 import ScrollGlassNav from "./scroll-glass-nav"
 import { useAuth } from "../lib/auth-context"
@@ -51,80 +52,80 @@ export default function Header() {
               alt="CognixAI Labs" 
               className="h-8 w-auto"
             />
-            <span className="font-semibold tracking-tight text-[color:var(--bg)]">
+            <span className="font-semibold tracking-tight">
               CognixAI Labs
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-5 md:ml-auto md:justify-end">
-            <Link href="/services" className="text-[color:var(--bg)] hover:opacity-80 transition">
+            <Link href="/services" className=" hover:opacity-80 transition">
               Services
             </Link>
-            <a href="#demo" className="text-[color:var(--bg)] hover:opacity-80 transition">
+            <a href="#demo" className=" hover:opacity-80 transition">
               Demo
             </a>
             {user ? (
               <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button className="outline-none focus:outline-none">
-                      <Avatar className="h-8 w-8 cursor-pointer hover:opacity-80 transition">
-                        <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email || ""} />
-                        <AvatarFallback className="bg-teal-500/20 text-[color:var(--bg)] text-xs font-semibold">
-                          {user.email ? getInitials(user.email) : <User className="h-4 w-4" />}
-                        </AvatarFallback>
-                      </Avatar>
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">My Account</p>
-                        <p className="text-xs leading-none text-muted-foreground truncate">
-                          {user.email}
-                        </p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link 
-                        href="/dashboard/settings" 
-                        onClick={(e) => handleProtectedNavigation("/dashboard/settings", e)}
-                        className="cursor-pointer"
-                      >
-                        <Settings className="mr-2 h-4 w-4" />
-                        Settings
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link 
-                        href="/dashboard/purchases"
-                        onClick={(e) => handleProtectedNavigation("/dashboard/purchases", e)}
-                        className="cursor-pointer"
-                      >
-                        <ShoppingBag className="mr-2 h-4 w-4" />
-                        My Purchases
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem 
-                      onClick={handleLogout}
-                      className="cursor-pointer text-destructive focus:text-destructive"
+                <DropdownMenuTrigger asChild>
+                  <button className="outline-none focus:outline-none">
+                    <Avatar className="h-8 w-8 cursor-pointer hover:opacity-80 transition">
+                      <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email || ""} />
+                      <AvatarFallback className="bg-teal-500/20 text-white text-xs font-semibold">
+                        {user.email ? getInitials(user.email) : <User className="h-4 w-4" />}
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none text-white">My Account</p>
+                      <p className="text-xs leading-none text-muted-foreground truncate text-white/70">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link 
+                      href="/dashboard/settings" 
+                      onClick={(e) => handleProtectedNavigation("/dashboard/settings", e)}
+                      className="cursor-pointer text-white"
                     >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link 
+                      href="/dashboard/purchases"
+                      onClick={(e) => handleProtectedNavigation("/dashboard/purchases", e)}
+                      className="cursor-pointer text-white"
+                    >
+                      <ShoppingBag className="mr-2 h-4 w-4" />
+                      My Purchases
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem 
+                    onClick={handleLogout}
+                    className="cursor-pointer text-destructive focus:text-destructive"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <Link
                 href="/login"
-                className="text-[color:var(--bg)] hover:opacity-80 transition"
+                className="hover:opacity-80 transition"
               >
                 Login
               </Link>
             )}
             <a
               href="#contact"
-              className="btn btn-primary glow-teal !px-3 !py-1.5 text-xs md:!px-3 md:!py-1.5 md:text-sm"
+              className="btn btn-primary glow-teal !px-3 !py-1.5 text-xs md:!px-3 md:!py-1.5 md:text-sm text-white"
             >
               Book Free Consultation
             </a>

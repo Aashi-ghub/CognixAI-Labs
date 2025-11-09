@@ -1,3 +1,5 @@
+
+
 export default function SiteFooter() {
   return (
     <footer className="border-t border-[color:var(--border)] bg-[color:var(--section-dark)] text-[color:var(--text)]">
@@ -5,7 +7,7 @@ export default function SiteFooter() {
         <div>
           <div className="flex items-center space-x-2 mb-2">
             <img 
-              src="/images/logo.png" 
+              src="/images/white logo.png" 
               alt="CognixAI Labs" 
               className="h-6 w-auto"
             />
