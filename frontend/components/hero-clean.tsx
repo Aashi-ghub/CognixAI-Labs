@@ -1,11 +1,13 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useConsultationPopup } from "@/lib/consultation-popup-context"
 
 export default function HeroClean() {
   const glowRef = useRef<HTMLDivElement>(null)
   const h1Ref = useRef<HTMLHeadingElement>(null)
   const ctasRef = useRef<HTMLDivElement>(null)
+  const { openWorkflowAnalysis } = useConsultationPopup()
 
   useEffect(() => {
     // Subtle parallax glow
@@ -87,13 +89,17 @@ export default function HeroClean() {
             ref={ctasRef}
             className="mt-6 flex flex-wrap items-center justify-center gap-3 opacity-0 translate-y-2 transition-all duration-700 will-change-transform"
           >
-            <a
-              href="#analysis"
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault()
+                openWorkflowAnalysis()
+              }}
               aria-label="Get Free Workflow Analysis"
-              className="rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.35)]"
+              className="rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.35)] hover:shadow-[0_0_40px_rgba(0,230,195,0.5)] transition-shadow"
             >
               Get Free Workflow Analysis
-            </a>
+            </button>
             <a
               href="#strategy"
               aria-label="Book Strategy Call"

@@ -11,22 +11,35 @@ export async function POST(req: Request) {
     const supabase = createClient(supabaseUrl, serviceKey)
 
     const body = await req.json()
-    const { name, contact, company, goal, industry, teamSize, challenge, wantsCall } = body || {}
+    const { name, contact, company, goal, industry, teamSize, challenge, wantsCall, email, phone, companyWebsite, automationRequirements } = body || {}
     
     // Handle both old and new formats
     if (industry && teamSize && challenge) {
       // New format: AI Workflow Audit - use new structured fields
       const goalText = goal || `AI Workflow Audit - Industry: ${industry}, Team Size: ${teamSize}, Challenge: ${challenge}${wantsCall ? " - Wants Strategy Call" : ""}`
-      const { error } = await supabase.from("consultation_requests").insert({ 
-        name: name || "AI Audit Lead", 
-        contact: contact || "via-popup", 
+      
+      // Build contact info - prefer email/phone from form, fallback to old contact field
+      const contactInfo = email || phone || contact || "via-popup"
+      const contactName = name?.trim() || email?.split("@")[0] || "AI Audit Lead"
+      
+      const insertData: any = { 
+        name: contactName, 
+        contact: contactInfo, 
         company: company || null, 
         goal: goalText,
         industry: industry,
         team_size: teamSize,
         challenge: challenge,
         wants_call: wantsCall === true
-      })
+      }
+      
+      // Add new fields if they exist
+      if (email) insertData.email = email
+      if (phone) insertData.phone = phone
+      if (companyWebsite) insertData.company_website = companyWebsite
+      if (automationRequirements) insertData.automation_requirements = automationRequirements
+      
+      const { error } = await supabase.from("consultation_requests").insert(insertData)
       if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 })
       }
@@ -38,16 +51,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const { error } = await supabase.from("consultation_requests").insert({ 
+    const insertData: any = { 
       name, 
       contact, 
-      company, 
+      company: company || null, 
       goal,
       industry: null,
       team_size: null,
       challenge: null,
       wants_call: false
-    })
+    }
+    
+    // Add new fields if they exist
+    if (email) insertData.email = email
+    if (phone) insertData.phone = phone
+    if (companyWebsite) insertData.company_website = companyWebsite
+    if (automationRequirements) insertData.automation_requirements = automationRequirements
+
+    const { error } = await supabase.from("consultation_requests").insert(insertData)
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
