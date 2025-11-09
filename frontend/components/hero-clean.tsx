@@ -1,24 +1,22 @@
 "use client"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useConsultationPopup } from "@/lib/consultation-popup-context"
+
+const typewriterWords = [
+  "AI Workflow Designers",
+  "Client Outreach Bots",
+  "Operations Assistants",
+  "Sales Automators",
+  "Data Sync Agents"
+]
 
 export default function HeroClean() {
   const h1Ref = useRef<HTMLHeadingElement>(null)
   const ctasRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const typewriterRef = useRef<HTMLSpanElement>(null)
   const { openWorkflowAnalysis } = useConsultationPopup()
-
-  useEffect(() => {
-    // Subtle parallax glow
-    const onMove = (e: MouseEvent) => {
-      const el = glowRef.current
-      if (!el) return
-      const x = (e.clientX / window.innerWidth - 0.5) * 30
-      const y = (e.clientY / window.innerHeight - 0.5) * 30
-      el.style.transform = `translate(${x}px, ${y}px)`
-    }
-    window.addEventListener("mousemove", onMove)
-    return () => window.removeEventListener("mousemove", onMove)
-  }, [])
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     const elements: HTMLElement[] = [h1Ref.current, ctasRef.current].filter(Boolean) as HTMLElement[]
@@ -45,87 +43,160 @@ export default function HeroClean() {
     return () => obs.disconnect()
   }, [])
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return
+      const rect = containerRef.current.getBoundingClientRect()
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2
+      setMousePosition({ x, y })
+    }
+
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
+  }, [])
+
+  useEffect(() => {
+    if (!typewriterRef.current) return
+    
+    let wordIndex = 0
+    let charIndex = 0
+    let isDeleting = false
+    let typingSpeed = 100
+    let timeoutId: NodeJS.Timeout | null = null
+    let isActive = true
+
+    const type = () => {
+      if (!isActive || !typewriterRef.current) return
+      
+      const currentWord = typewriterWords[wordIndex]
+      
+      if (isDeleting) {
+        typewriterRef.current.textContent = currentWord.substring(0, charIndex - 1)
+        charIndex--
+        typingSpeed = 50
+      } else {
+        typewriterRef.current.textContent = currentWord.substring(0, charIndex + 1)
+        charIndex++
+        typingSpeed = 100
+      }
+
+      if (!isDeleting && charIndex === currentWord.length) {
+        typingSpeed = 2000
+        isDeleting = true
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false
+        wordIndex = (wordIndex + 1) % typewriterWords.length
+        typingSpeed = 500
+      }
+
+      if (isActive) {
+        timeoutId = setTimeout(type, typingSpeed)
+      }
+    }
+
+    timeoutId = setTimeout(type, 1000)
+    return () => {
+      isActive = false
+      if (timeoutId) clearTimeout(timeoutId)
+    }
+  }, [])
+
   return (
     <section
+      ref={containerRef}
       className="relative min-h-[100svh] bg-white text-neutral-900 overflow-hidden"
       aria-label="Hero"
+      style={{ perspective: "1000px" }}
     >
-      {/* Minimal AI-styled background: dot grid, soft glow, fine lines */}
-      <div className="absolute inset-0 z-0 pointer-events-none select-none" aria-hidden>
-        {/* subtle dot grid */}
-        <div
-          className="absolute inset-0 bg-dots"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(0,0,0,0.10) 1px, transparent 1px)",
-            backgroundSize: "20px 20px",
-            backgroundPosition: "0 0",
-          }}
-        />
-        {/* soft brand glow in the top-right */}
-        <div
-          className="absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full blur-3xl opacity-20 glow"
-          style={{
-            background:
-              "radial-gradient(closest-side, rgba(0,230,195,0.28), rgba(0,230,195,0))",
-          }}
-        />
-        {/* soft vignette bottom center */}
-        <div
-          className="absolute inset-x-0 bottom-0 h-[50%] vignette"
-          style={{
-            background:
-              "radial-gradient(800px 320px at 50% 100%, rgba(0,0,0,0.09), rgba(0,0,0,0))",
-          }}
-        />
-        {/* fine circuit-like lines */}
-        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="line-fade" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="rgba(0,0,0,0)" />
-              <stop offset="35%" stopColor="rgba(0,0,0,0.14)" />
-              <stop offset="65%" stopColor="rgba(0,0,0,0.14)" />
-              <stop offset="100%" stopColor="rgba(0,0,0,0)" />
-            </linearGradient>
-          </defs>
-          <path d="M 5 25 H 95" stroke="url(#line-fade)" strokeWidth="0.25" fill="none" style={{ strokeDasharray: "120 240", animation: "dash 7s linear infinite" }} />
-          <path d="M 10 45 C 35 40, 65 50, 90 45" stroke="url(#line-fade)" strokeWidth="0.25" fill="none" style={{ strokeDasharray: "100 200", animation: "dash 9s linear infinite", animationDelay: "1s" }} />
-          <path d="M 8 70 H 92" stroke="url(#line-fade)" strokeWidth="0.25" fill="none" style={{ strokeDasharray: "110 220", animation: "dash 8s linear infinite", animationDelay: "0.5s" }} />
-        </svg>
-
-        {/* diagonal highlight sweep */}
-        <div className="absolute inset-0 mix-blend-normal">
-          <div className="absolute -inset-20 sweep-gradient" />
-        </div>
-
-        {/* floating dots */}
-        <div className="absolute inset-0">
-          <span className="float-dot" style={{ left: "15%", bottom: "10%", animationDelay: "0s" }} />
-          <span className="float-dot" style={{ left: "32%", bottom: "14%", animationDelay: "2s" }} />
-          <span className="float-dot" style={{ left: "58%", bottom: "12%", animationDelay: "1s" }} />
-          <span className="float-dot" style={{ left: "72%", bottom: "8%", animationDelay: "3s" }} />
-        </div>
+      {/* Animated grid background */}
+      <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden" aria-hidden>
+        <div className="animated-grid" />
       </div>
-      <div className="relative z-10 mx-auto max-w-6xl px-4 flex items-center justify-center min-h-[100svh]">
+
+      {/* Multiple Aurora background effects */}
+      <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden" aria-hidden>
+        <div className="aurora-1" />
+        <div className="aurora-2" />
+        <div className="aurora-3" />
+        <div className="aurora-4" />
+      </div>
+
+      {/* Floating particles */}
+      <div className="absolute inset-0 z-[1] pointer-events-none select-none overflow-hidden" aria-hidden>
+        {[...Array(12)].map((_, i) => (
+          <div
+            key={i}
+            className="floating-particle"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${15 + Math.random() * 10}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Glowing orbs */}
+      <div className="absolute inset-0 z-[1] pointer-events-none select-none overflow-hidden" aria-hidden>
+        <div 
+          className="glow-orb orb-1"
+          style={{
+            transform: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 30}px)`,
+          }}
+        />
+        <div
+          className="glow-orb orb-2"
+          style={{
+            transform: `translate(${mousePosition.x * -20}px, ${mousePosition.y * -20}px)`,
+          }}
+        />
+        <div
+          className="glow-orb orb-3"
+          style={{
+            transform: `translate(${mousePosition.x * 25}px, ${mousePosition.y * -25}px)`,
+          }}
+        />
+      </div>
+
+      {/* Geometric shapes */}
+      <div className="absolute inset-0 z-[1] pointer-events-none select-none overflow-hidden" aria-hidden>
+        <div className="geometric-shape shape-1" />
+        <div className="geometric-shape shape-2" />
+        <div className="geometric-shape shape-3" />
+        </div>
+
+      <div 
+        className="relative z-10 mx-auto max-w-6xl px-4 flex items-center justify-center min-h-[100svh]"
+        style={{
+          transform: `translate3d(${mousePosition.x * 10}px, ${mousePosition.y * 10}px, 0)`,
+          transition: "transform 0.1s ease-out",
+        }}
+      >
         <div className="w-full text-center">
-          <p className="text-xs uppercase tracking-[0.22em] text-[color:var(--brand)] mb-3">
-            Automation. Intelligence. Scale.
+          <p className="text-xs uppercase tracking-[0.22em] text-[color:var(--brand)] mb-3 animate-fade-in">
+            <span className="inline-block animate-pulse">Automation.</span>{" "}
+            <span className="inline-block animate-pulse" style={{ animationDelay: "0.2s" }}>Intelligence.</span>{" "}
+            <span className="inline-block animate-pulse" style={{ animationDelay: "0.4s" }}>Scale.</span>
           </p>
           <h1
             ref={h1Ref}
-            className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight text-center"
+            className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-center px-4"
           >
             Turn your business into<br />
-            <span className="bg-gradient-to-r from-[color:var(--brand)] to-cyan-500 bg-clip-text text-transparent whitespace-nowrap">an automated powerhouse</span>
+            <span className="animated-gradient-text whitespace-nowrap">
+              an automated powerhouse
+            </span>
           </h1>
 
-          <h2 className="mt-6 text-xl md:text-2xl leading-relaxed font-medium text-neutral-700">
+          <h2 className="mt-6 text-xl md:text-2xl leading-relaxed font-medium text-neutral-700 animate-slide-up">
             Build. Launch. Scale. All with AI automation.
           </h2>
 
           <div
             ref={ctasRef}
-            className="mt-6 flex flex-wrap items-center justify-center gap-3"
+            className="mt-8 flex flex-wrap items-center justify-center gap-4"
           >
             <button
               type="button"
@@ -134,16 +205,18 @@ export default function HeroClean() {
                 openWorkflowAnalysis()
               }}
               aria-label="Get Free Workflow Analysis"
-              className="rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.35)] hover:shadow-[0_0_40px_rgba(0,230,195,0.5)] transition-shadow"
+              className="group relative rounded-full bg-[color:var(--brand)] px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.35)] hover:shadow-[0_0_50px_rgba(0,230,195,0.6)] transition-all duration-300 hover:scale-105 overflow-hidden"
             >
-              Get Free Workflow Analysis
+              <span className="relative z-10">Get Free Workflow Analysis</span>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
             </button>
             <a
               href="#contact"
               aria-label="Book Strategy Call"
-              className="rounded-full border border-black px-5 py-2.5 text-sm font-medium hover:bg-neutral-100"
+              className="group relative rounded-full border border-neutral-300 px-6 py-3 text-sm font-medium hover:bg-neutral-100 transition-all duration-300 hover:scale-105 hover:shadow-lg"
             >
-              Book Strategy Call
+              <span className="relative z-10">Book Strategy Call</span>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
             </a>
           </div>
 
@@ -185,58 +258,290 @@ export default function HeroClean() {
         }}
       />
       <style jsx>{`
-        @keyframes panGrid {
-          0% { background-position: 0 0; }
-          100% { background-position: 40px 40px; }
-        }
-        .bg-dots { animation: panGrid 22s linear infinite; }
-
-        @keyframes drift {
-          0% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(10px, -6px) scale(1.02); }
-          100% { transform: translate(0, 0) scale(1); }
-        }
-        @keyframes pulse {
-          0% { opacity: 0.16; }
-          50% { opacity: 0.28; }
-          100% { opacity: 0.16; }
-        }
-        .glow { animation: drift 18s ease-in-out infinite, pulse 7s ease-in-out infinite; }
-
-        @keyframes vignettePulse {
-          0% { opacity: 0.9; }
-          50% { opacity: 1; }
-          100% { opacity: 0.9; }
-        }
-        .vignette { animation: vignettePulse 16s ease-in-out infinite; }
-
-        @keyframes dash { to { stroke-dashoffset: -360; } }
-
-        /* diagonal sweep */
-        .sweep-gradient {
-          background: linear-gradient(60deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0) 65%);
-          animation: sweep 14s linear infinite;
-        }
-        @keyframes sweep {
-          0% { transform: translateX(-20%) translateY(0); }
-          100% { transform: translateX(20%) translateY(0); }
-        }
-
-        /* floating dots */
-        .float-dot {
+        /* Animated grid background */
+        .animated-grid {
           position: absolute;
-          width: 6px; height: 6px;
-          border-radius: 9999px;
-          background: rgba(0,0,0,0.20);
-          box-shadow: 0 0 10px rgba(0,0,0,0.10);
-          animation: floatUp 10s ease-in-out infinite;
+          inset: 0;
+          background-image: 
+            linear-gradient(rgba(0, 230, 195, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 230, 195, 0.03) 1px, transparent 1px);
+          background-size: 50px 50px;
+          animation: gridMove 20s linear infinite;
         }
-        @keyframes floatUp {
-          0%   { transform: translateY(0) translateX(0); opacity: 0.0; }
-          10%  { opacity: 0.5; }
-          50%  { transform: translateY(-40px) translateX(6px); opacity: 0.35; }
-          90%  { opacity: 0.0; }
-          100% { transform: translateY(-80px) translateX(12px); opacity: 0.0; }
+
+        @keyframes gridMove {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(50px, 50px); }
+        }
+
+        /* Aurora effects */
+        .aurora-1 {
+          position: absolute;
+          top: -20%;
+          left: -10%;
+          width: 80%;
+          height: 40%;
+          background: radial-gradient(ellipse 60% 50% at 30% 50%, rgba(0, 230, 195, 0.08), transparent);
+          animation: aurora1 25s ease-in-out infinite;
+          filter: blur(80px);
+        }
+
+        .aurora-2 {
+          position: absolute;
+          top: 20%;
+          right: -15%;
+          width: 70%;
+          height: 50%;
+          background: radial-gradient(ellipse 50% 60% at 70% 40%, rgba(0, 230, 195, 0.06), transparent);
+          animation: aurora2 30s ease-in-out infinite;
+          filter: blur(70px);
+        }
+
+        .aurora-3 {
+          position: absolute;
+          bottom: -10%;
+          left: 10%;
+          width: 60%;
+          height: 35%;
+          background: radial-gradient(ellipse 70% 40% at 50% 60%, rgba(0, 230, 195, 0.07), transparent);
+          animation: aurora3 22s ease-in-out infinite;
+          filter: blur(75px);
+        }
+
+        .aurora-4 {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 55%;
+          height: 55%;
+          background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0, 230, 195, 0.05), transparent);
+          animation: aurora4 28s ease-in-out infinite;
+          filter: blur(90px);
+        }
+
+        @keyframes aurora1 {
+          0%, 100% {
+            transform: translate(0, 0) scale(1) rotate(0deg);
+            opacity: 1;
+          }
+          33% {
+            transform: translate(5%, -3%) scale(1.1) rotate(2deg);
+            opacity: 0.85;
+          }
+          66% {
+            transform: translate(-3%, 4%) scale(0.95) rotate(-1deg);
+            opacity: 1;
+          }
+        }
+
+        @keyframes aurora2 {
+          0%, 100% {
+            transform: translate(0, 0) scale(1) rotate(0deg);
+            opacity: 1;
+          }
+          33% {
+            transform: translate(-4%, 5%) scale(1.05) rotate(-2deg);
+            opacity: 0.9;
+          }
+          66% {
+            transform: translate(3%, -2%) scale(0.98) rotate(1deg);
+            opacity: 1;
+          }
+        }
+
+        @keyframes aurora3 {
+          0%, 100% {
+            transform: translate(0, 0) scale(1) rotate(0deg);
+            opacity: 1;
+          }
+          33% {
+            transform: translate(4%, 3%) scale(1.08) rotate(1.5deg);
+            opacity: 0.88;
+          }
+          66% {
+            transform: translate(-5%, -4%) scale(0.92) rotate(-1.5deg);
+            opacity: 1;
+          }
+        }
+
+        @keyframes aurora4 {
+          0%, 100% {
+            transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            opacity: 1;
+          }
+          33% {
+            transform: translate(-48%, -52%) scale(1.12) rotate(3deg);
+            opacity: 0.82;
+          }
+          66% {
+            transform: translate(-52%, -48%) scale(0.9) rotate(-2deg);
+            opacity: 1;
+          }
+        }
+
+        /* Floating particles */
+        .floating-particle {
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          background: rgba(0, 230, 195, 0.4);
+          border-radius: 50%;
+          box-shadow: 0 0 10px rgba(0, 230, 195, 0.5);
+          animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+          0% {
+            transform: translateY(100vh) translateX(0) scale(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-100px) translateX(100px) scale(1);
+            opacity: 0;
+          }
+        }
+
+        /* Glowing orbs */
+        .glow-orb {
+          position: absolute;
+          border-radius: 50%;
+          transition: transform 0.3s ease-out;
+        }
+
+        .orb-1 {
+          width: 300px;
+          height: 300px;
+          background: radial-gradient(circle, rgba(0, 230, 195, 0.4), transparent);
+          top: 10%;
+          left: 10%;
+          animation: orbPulse1 4s ease-in-out infinite;
+        }
+
+        .orb-2 {
+          width: 200px;
+          height: 200px;
+          background: radial-gradient(circle, rgba(0, 230, 195, 0.3), transparent);
+          bottom: 20%;
+          right: 15%;
+          animation: orbPulse2 5s ease-in-out infinite;
+        }
+
+        .orb-3 {
+          width: 250px;
+          height: 250px;
+          background: radial-gradient(circle, rgba(0, 230, 195, 0.35), transparent);
+          top: 50%;
+          right: 20%;
+          animation: orbPulse3 6s ease-in-out infinite;
+        }
+
+        @keyframes orbPulse1 {
+          0%, 100% { opacity: 0.5; filter: blur(40px) brightness(1); }
+          50% { opacity: 0.8; filter: blur(35px) brightness(1.2); }
+        }
+
+        @keyframes orbPulse2 {
+          0%, 100% { opacity: 0.4; filter: blur(40px) brightness(1); }
+          50% { opacity: 0.7; filter: blur(30px) brightness(1.3); }
+        }
+
+        @keyframes orbPulse3 {
+          0%, 100% { opacity: 0.45; filter: blur(40px) brightness(1); }
+          50% { opacity: 0.75; filter: blur(35px) brightness(1.15); }
+        }
+
+        /* Geometric shapes */
+        .geometric-shape {
+          position: absolute;
+          border: 2px solid rgba(0, 230, 195, 0.2);
+          animation: rotateShape linear infinite;
+        }
+
+        .shape-1 {
+          width: 100px;
+          height: 100px;
+          top: 20%;
+          right: 10%;
+          border-radius: 20% 80% 20% 80%;
+          animation-duration: 20s;
+        }
+
+        .shape-2 {
+          width: 80px;
+          height: 80px;
+          bottom: 30%;
+          left: 15%;
+          border-radius: 50%;
+          animation-duration: 25s;
+        }
+
+        .shape-3 {
+          width: 60px;
+          height: 60px;
+          top: 60%;
+          left: 80%;
+          transform: rotate(45deg);
+          animation-duration: 15s;
+        }
+
+        @keyframes rotateShape {
+          0% { transform: rotate(0deg); opacity: 0.2; }
+          50% { opacity: 0.4; }
+          100% { transform: rotate(360deg); opacity: 0.2; }
+        }
+
+        /* Animated gradient text */
+        .animated-gradient-text {
+          background: linear-gradient(
+            90deg,
+            rgba(0, 230, 195, 1) 0%,
+            rgba(0, 230, 195, 1) 25%,
+            rgba(6, 182, 212, 1) 50%,
+            rgba(0, 230, 195, 1) 75%,
+            rgba(0, 230, 195, 1) 100%
+          );
+          background-size: 200% 100%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+
+        /* Text animations */
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes slide-up {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fade-in {
+          animation: fade-in 1s ease-out;
+        }
+
+        .animate-slide-up {
+          animation: slide-up 0.8s ease-out 0.3s both;
         }
       `}</style>
     </section>

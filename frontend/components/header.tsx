@@ -63,59 +63,7 @@ export default function Header() {
             <a href="#demo" className=" hover:opacity-80 transition">
               Demo
             </a>
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="outline-none focus:outline-none">
-                    <Avatar className="h-8 w-8 cursor-pointer hover:opacity-80 transition">
-                      <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email || ""} />
-                      <AvatarFallback className="bg-teal-500/20 text-white text-xs font-semibold">
-                        {user.email ? getInitials(user.email) : <User className="h-4 w-4" />}
-                      </AvatarFallback>
-                    </Avatar>
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none text-white">My Account</p>
-                      <p className="text-xs leading-none text-muted-foreground truncate text-white/70">
-                        {user.email}
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link 
-                      href="/dashboard/settings" 
-                      onClick={(e) => handleProtectedNavigation("/dashboard/settings", e)}
-                      className="cursor-pointer text-white"
-                    >
-                      <Settings className="mr-2 h-4 w-4" />
-                      Settings
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link 
-                      href="/dashboard/purchases"
-                      onClick={(e) => handleProtectedNavigation("/dashboard/purchases", e)}
-                      className="cursor-pointer text-white"
-                    >
-                      <ShoppingBag className="mr-2 h-4 w-4" />
-                      My Purchases
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem 
-                    onClick={handleLogout}
-                    className="cursor-pointer text-destructive focus:text-destructive"
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
+            {!user && (
               <Link
                 href="/login"
                 className="hover:opacity-80 transition"
@@ -129,6 +77,59 @@ export default function Header() {
             >
               Book Free Consultation
             </a>
+            {user && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="outline-none focus:outline-none">
+                    <Avatar className="h-8 w-8 cursor-pointer hover:opacity-80 transition">
+                      <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email || ""} />
+                      <AvatarFallback className="bg-teal-500/20 text-white text-xs font-semibold">
+                        {user.email ? getInitials(user.email) : <User className="h-4 w-4" />}
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none text-neutral-900 dark:text-white">My Account</p>
+                      <p className="text-xs leading-none text-muted-foreground truncate text-neutral-600 dark:text-neutral-400">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link 
+                      href="/dashboard/settings" 
+                      onClick={(e) => handleProtectedNavigation("/dashboard/settings", e)}
+                      className="cursor-pointer text-neutral-900 dark:text-white focus:bg-neutral-100 dark:focus:bg-neutral-800"
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link 
+                      href="/dashboard/purchases"
+                      onClick={(e) => handleProtectedNavigation("/dashboard/purchases", e)}
+                      className="cursor-pointer text-neutral-900 dark:text-white focus:bg-neutral-100 dark:focus:bg-neutral-800"
+                    >
+                      <ShoppingBag className="mr-2 h-4 w-4" />
+                      My Purchases
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem 
+                    onClick={handleLogout}
+                    className="cursor-pointer text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-950/20"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </nav>
         </div>
       </header>
