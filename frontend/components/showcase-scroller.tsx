@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
+import { Volume2 } from "lucide-react"
 
 type Panel = {
   id: string
@@ -133,7 +134,9 @@ export default function ShowcaseScroller() {
                     {p.videoSrc ? (
                       <div className="relative w-full max-w-2xl aspect-video rounded-lg overflow-hidden shadow-lg">
                         <video
-                          ref={(el) => (videoRefs.current[p.id] = el)}
+                          ref={(el) => {
+                            videoRefs.current[p.id] = el
+                          }}
                           className="w-full h-full object-cover"
                           muted={!unmutedPanels[p.id]}
                           loop
@@ -146,9 +149,10 @@ export default function ShowcaseScroller() {
                         {!unmutedPanels[p.id] && activePanelId === p.id && (
                           <button
                             onClick={() => handleUnmute(p.id)}
-                            className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/60 text-white text-xs px-3 py-1.5 rounded-full hover:bg-black/70 backdrop-blur-sm"
+                            aria-label="Unmute video"
+                            className="absolute bottom-3 right-3 bg-black/60 text-white p-2 rounded-full hover:bg-black/70 backdrop-blur-sm"
                           >
-                            🔊 Tap to Unmute
+                            <Volume2 className="h-4 w-4" aria-hidden />
                           </button>
                         )}
                       </div>
