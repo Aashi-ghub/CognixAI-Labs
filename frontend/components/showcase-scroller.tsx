@@ -46,11 +46,14 @@ export default function ShowcaseScroller() {
   )
 
   const containerRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({})
   const [progress, setProgress] = useState(0)
   const [activePanelId, setActivePanelId] = useState<string | null>(null)
   const [unmutedPanels, setUnmutedPanels] = useState<Record<string, boolean>>({})
   const [inView, setInView] = useState(false)
+  const rafIdRef = useRef<number | null>(null)
+  const lastProgressRef = useRef(0)
 
   // Track if showcase is in viewport
   useEffect(() => {
@@ -65,22 +68,57 @@ export default function ShowcaseScroller() {
     return () => observer.disconnect()
   }, [])
 
-  // Track scroll for horizontal translation
+  // Track scroll for horizontal translation with requestAnimationFrame
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
 
-    const onScroll = () => {
+    const updateProgress = () => {
+      const scrollContainer = scrollContainerRef.current
+      if (!scrollContainer) {
+        rafIdRef.current = null
+        return
+      }
+      
       const rect = container.getBoundingClientRect()
       const total = rect.height - window.innerHeight
       const scrolled = Math.min(Math.max(-rect.top, 0), total)
-      setProgress(total > 0 ? scrolled / total : 0)
+      const newProgress = total > 0 ? scrolled / total : 0
+      
+      // Always update transform for smoothness, but throttle state updates
+      const translateX = -newProgress * (100 * (panels.length - 1))
+      scrollContainer.style.transform = `translate3d(${translateX}vw, 0, 0)`
+      
+      // Only update state if progress changed significantly (reduce re-renders)
+      if (Math.abs(newProgress - lastProgressRef.current) > 0.001) {
+        lastProgressRef.current = newProgress
+        setProgress(newProgress)
+      }
+      
+      rafIdRef.current = null
     }
 
-    window.addEventListener("scroll", onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
+    const onScroll = () => {
+      // Use requestAnimationFrame to throttle updates
+      if (rafIdRef.current === null) {
+        rafIdRef.current = requestAnimationFrame(updateProgress)
+      }
+    }
+
+    // Wait for next tick to ensure refs are ready
+    const initTimeout = setTimeout(() => {
+      window.addEventListener("scroll", onScroll, { passive: true })
+      updateProgress() // Initial update
+    }, 10)
+    
+    return () => {
+      clearTimeout(initTimeout)
+      window.removeEventListener("scroll", onScroll)
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current)
+      }
+    }
+  }, [panels.length])
 
   // Determine active panel
   useEffect(() => {
@@ -111,8 +149,6 @@ export default function ShowcaseScroller() {
     video.play().catch(() => {})
   }
 
-  const translateX = `translateX(-${progress * (100 * (panels.length - 1))}vw)`
-
   return (
     <section
       id="showcase"
@@ -123,14 +159,20 @@ export default function ShowcaseScroller() {
       <div className="sticky top-0 h-[100svh] overflow-hidden bg-[color:var(--charcoal)]">
         <div className="absolute inset-0 flex items-center">
           <div
-            className="flex h-full transition-transform will-change-transform"
-            style={{ transform: translateX, width: `calc(100vw * ${panels.length})` }}
+            ref={scrollContainerRef}
+            className="flex h-full"
+            style={{ 
+              width: `calc(100vw * ${panels.length})`,
+              willChange: 'transform',
+              backfaceVisibility: 'hidden',
+              perspective: '1000px'
+            }}
           >
             {panels.map((p) => (
               <article key={p.id} className="w-[100vw] h-full">
                 <div className="grid h-full grid-cols-1 md:grid-cols-2">
                   {/* Video side */}
-                  <div className="relative flex items-center justify-center p-8">
+                  <div className="relative flex items-center justify-center p-4 md:p-8">
                     {p.videoSrc ? (
                       <div className="relative w-full max-w-2xl aspect-video rounded-lg overflow-hidden shadow-lg">
                         <video
@@ -164,12 +206,12 @@ export default function ShowcaseScroller() {
                   </div>
 
                   {/* Text side */}
-                  <div className="flex items-center justify-center">
-                    <div className="max-w-xl p-8 md:p-14">
+                  <div className="flex items-center justify-center p-4 md:p-8">
+                    <div className="max-w-xl text-center md:text-left">
                       <h3 className="text-2xl md:text-4xl font-semibold text-white">
                         {p.title}
                       </h3>
-                      <p className="mt-4 text-[15px] leading-relaxed text-gray-300">
+                      <p className="mt-4 text-sm md:text-[15px] leading-relaxed text-gray-300">
                         {p.description}
                       </p>
                     </div>
@@ -181,10 +223,10 @@ export default function ShowcaseScroller() {
         </div>
 
         {/* Skip button */}
-        <div className="absolute bottom-4 right-4">
+        <div className="absolute bottom-4 right-4 z-10">
           <a
             href="#about"
-            className="rounded-full bg-black/40 border border-gray-500 px-4 py-2 text-xs text-white"
+            className="rounded-full bg-black/40 border border-gray-500 px-3 md:px-4 py-2 text-xs text-white"
           >
             Skip Showcase
           </a>

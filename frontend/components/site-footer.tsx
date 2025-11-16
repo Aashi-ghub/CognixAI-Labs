@@ -3,9 +3,9 @@
 export default function SiteFooter() {
   return (
     <footer className="border-t border-[color:var(--border)] bg-[color:var(--section-dark)] text-[color:var(--text)]">
-      <div className="mx-auto max-w-6xl px-4 py-10 grid gap-8 md:grid-cols-3">
-        <div>
-          <div className="flex items-center space-x-2 mb-2">
+      <div className="mx-auto max-w-6xl px-4 py-8 md:py-10 grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+        <div className="text-center sm:text-left">
+          <div className="flex items-center justify-center sm:justify-start space-x-2 mb-2">
             <img 
               src="/images/white logo.png" 
               alt="CognixAI Labs" 
@@ -15,7 +15,7 @@ export default function SiteFooter() {
           </div>
           <p className="text-sm text-[color:var(--text-muted)]">Cinematic AI automations for modern teams.</p>
         </div>
-        <nav aria-label="Footer">
+        <nav aria-label="Footer" className="text-center sm:text-left">
           <ul className="grid gap-2 text-sm text-[color:var(--text)]">
             <li>
               <a href="#showcase" className="hover:text-[color:var(--text-strong)]">
@@ -54,12 +54,12 @@ export default function SiteFooter() {
             </li>
           </ul>
         </nav>
-        <div>
+        <div className="text-center sm:text-left">
           <p className="text-sm text-[color:var(--text-muted)]">Contact</p>
-          <p className="text-sm text-[color:var(--text)]">
+          <p className="text-sm text-[color:var(--text)] break-words">
             <a href="mailto:hello@cognixailabs.com" className="hover:text-[color:var(--text-strong)]">hello@cognixailabs.com</a>
           </p>
-          <div className="mt-4 flex gap-3 text-sm">
+          <div className="mt-4 flex gap-3 text-sm justify-center sm:justify-start">
             <a href="#" aria-label="LinkedIn" className="hover:text-[color:var(--text-strong)]">
               LinkedIn
             </a>
@@ -72,7 +72,7 @@ export default function SiteFooter() {
           </div>
         </div>
       </div>
-      <div className="border-t border-[color:var(--border)] py-4 text-center text-xs text-[color:var(--text-muted)]">
+      <div className="border-t border-[color:var(--border)] py-4 text-center text-xs text-[color:var(--text-muted)] px-4">
         © {new Date().getFullYear()} CognixAI Labs. All rights reserved.
       </div>
     </footer>

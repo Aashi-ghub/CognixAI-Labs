@@ -192,7 +192,12 @@
 
 /* Sections and containers */
 .section {
-  padding: 4rem 1rem;
+  padding: 3rem 1rem;
+}
+@media (min-width: 640px) {
+  .section {
+    padding: 4rem 1rem;
+  }
 }
 @media (min-width: 768px) {
   .section {
@@ -240,6 +245,17 @@
   font-weight: 600;
   transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
   box-shadow: 0 0 24px var(--glow-outer), 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+@media (max-width: 640px) {
+  .btn {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.875rem;
+  }
 }
 .btn:hover {
   transform: translateY(-1px);

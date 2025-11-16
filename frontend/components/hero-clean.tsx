@@ -182,22 +182,30 @@ export default function HeroClean() {
           </p>
           <h1
             ref={h1Ref}
-            className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-center px-4"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight text-center px-4 break-words overflow-wrap-anywhere"
           >
-            Turn your business into<br />
-            <span className="animated-gradient-text whitespace-nowrap">
+            Turn your business into<br className="hidden sm:block" />
+            <span className="animated-gradient-text block sm:inline sm:whitespace-nowrap">
               an automated powerhouse
             </span>
           </h1>
 
-          <h2 className="mt-6 text-xl md:text-2xl leading-relaxed font-medium text-neutral-700 animate-slide-up">
+          <h2 className="mt-4 md:mt-6 text-lg sm:text-xl md:text-2xl leading-relaxed font-medium text-neutral-700 animate-slide-up px-4">
             Build. Launch. Scale. All with AI automation.
           </h2>
 
           <div
             ref={ctasRef}
-            className="mt-8 flex flex-wrap items-center justify-center gap-4"
+            className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 px-4"
           >
+            <a
+              href="/services"
+              aria-label="Explore Our Services"
+              className="group relative rounded-full bg-[color:var(--brand)] w-full sm:w-auto px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.35)] hover:shadow-[0_0_50px_rgba(0,230,195,0.6)] transition-all duration-300 hover:scale-105 overflow-hidden text-center"
+            >
+              <span className="relative z-10">Explore Our Services</span>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+            </a>
             <button
               type="button"
               onClick={(e) => {
@@ -205,7 +213,7 @@ export default function HeroClean() {
                 openWorkflowAnalysis()
               }}
               aria-label="Get Free Workflow Analysis"
-              className="group relative rounded-full bg-[color:var(--brand)] px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.35)] hover:shadow-[0_0_50px_rgba(0,230,195,0.6)] transition-all duration-300 hover:scale-105 overflow-hidden"
+              className="group relative rounded-full bg-[color:var(--brand)] w-full sm:w-auto px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.35)] hover:shadow-[0_0_50px_rgba(0,230,195,0.6)] transition-all duration-300 hover:scale-105 overflow-hidden text-center"
             >
               <span className="relative z-10">Get Free Workflow Analysis</span>
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
@@ -213,7 +221,7 @@ export default function HeroClean() {
             <a
               href="#contact"
               aria-label="Book Strategy Call"
-              className="group relative rounded-full border border-neutral-300 px-6 py-3 text-sm font-medium hover:bg-neutral-100 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              className="group relative rounded-full border border-neutral-300 w-full sm:w-auto px-6 py-3 text-sm font-medium hover:bg-neutral-100 transition-all duration-300 hover:scale-105 hover:shadow-lg text-center"
             >
               <span className="relative z-10">Book Strategy Call</span>
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />

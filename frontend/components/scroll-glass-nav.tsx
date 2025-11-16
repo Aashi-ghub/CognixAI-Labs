@@ -2,11 +2,16 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { useRouter, usePathname } from "next/navigation"
+import { useConsultationPopup } from "@/lib/consultation-popup-context"
 
 export default function ScrollGlassNav() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [navStyle, setNavStyle] = useState<React.CSSProperties>({})
   const [onWhiteBg, setOnWhiteBg] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
+  const { openWorkflowAnalysis, openConsultationPopup } = useConsultationPopup()
   useEffect(() => {
     function checkNavContrast() {
       const navY = 60 // 12px (top-3) + ~48px nav height
@@ -66,7 +71,7 @@ export default function ScrollGlassNav() {
   return (
     <div
       aria-label="Centered navigation"
-      className="fixed left-1/2 top-3 -translate-x-1/2 z-50 transform"
+      className="hidden md:block fixed left-1/2 top-3 -translate-x-1/2 z-50 transform"
     >
       <nav
         className={`rounded-full px-4 py-2 shadow-md border ${onWhiteBg ? "" : ""}`}
@@ -86,25 +91,36 @@ export default function ScrollGlassNav() {
             </Link>
           </li>
           <li>
-            <Link
-              href="#demo"
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                // Check if we're on services page, open consultation popup, otherwise go to showcase
+                if (pathname === "/services") {
+                  openConsultationPopup()
+                } else {
+                  router.push("/#showcase")
+                }
+              }}
               className={`text-sm font-medium transition ${
                 onWhiteBg ? "text-white" : "text-white"
-              } hover:opacity-80`}
+              } hover:opacity-80 cursor-pointer`}
             >
               Demo
-            </Link>
+            </button>
           </li>
           <li className="ml-1">
-            <Link
-              href="#contact"
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                openWorkflowAnalysis()
+              }}
               className={`inline-flex items-center rounded-full border border-white px-3 py-1.5 text-xs font-semibold transition ${
                 onWhiteBg ? "text-white" : "text-white"
               } hover:opacity-90`}
               style={onWhiteBg ? { borderColor: "#fff" } : undefined}
             >
               Book free consultation
-            </Link>
+            </button>
           </li>
         </ul>
       </nav>

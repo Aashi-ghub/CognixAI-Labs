@@ -66,14 +66,14 @@ export default function ContactForm() {
 
   return (
     <section id="contact" className="bg-[color:var(--section-light)] text-[color:var(--text)]">
-      <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
-        <h2 className="text-center text-3xl md:text-4xl font-semibold text-black">Contact & Enquiry</h2>
-        <p className="mt-4 text-center text-[15px] text-black max-w-2xl mx-auto">
-          Tell us about your workflow and outcomes you want. We’ll reply with a tailored plan.
+      <div className="mx-auto max-w-6xl px-4 py-12 md:py-16 lg:py-24">
+        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold text-black px-4">Contact & Enquiry</h2>
+        <p className="mt-3 md:mt-4 text-center text-sm sm:text-[15px] text-black max-w-2xl mx-auto px-4">
+          Tell us about your workflow and outcomes you want. We'll reply with a tailored plan.
         </p>
         <form
           onSubmit={onSubmit}
-          className="mx-auto mt-8 max-w-2xl grid gap-4 rounded-3xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-6"
+          className="mx-auto mt-6 md:mt-8 max-w-2xl grid gap-4 rounded-2xl md:rounded-3xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4 sm:p-6"
         >
           <label className="grid gap-1">
             <span className="text-sm text-black font-medium">Name</span>
@@ -159,21 +159,21 @@ export default function ContactForm() {
             />
           </label>
 
-          <div className="flex gap-3 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
             <button
               type="submit"
               disabled={status === "sending"}
-              className="rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-[color:var(--on-brand)]"
+              className="w-full sm:w-auto rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-[color:var(--on-brand)]"
             >
               {status === "sending" ? "Sending..." : "Submit"}
             </button>
             {status === "sent" && (
-              <span className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--brand)]/30 bg-[color:var(--brand)]/10 px-3 py-2 text-sm text-black">
-                <CheckCircle2 className="text-[color:var(--brand)]" />
-                Thank you! We’ll contact you soon.
+              <span className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--brand)]/30 bg-[color:var(--brand)]/10 px-3 py-2 text-xs sm:text-sm text-black text-center">
+                <CheckCircle2 className="text-[color:var(--brand)] flex-shrink-0" />
+                <span>Thank you! We'll contact you soon.</span>
               </span>
             )}
-            {status === "error" && <span className="text-sm text-red-400">Something went wrong.</span>}
+            {status === "error" && <span className="text-sm text-red-400 text-center">Something went wrong.</span>}
           </div>
         </form>
       </div>

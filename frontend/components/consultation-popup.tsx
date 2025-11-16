@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, useImperativeHandle, forwardRef } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -13,7 +13,13 @@ interface ConsultationPopupProps {
   delayMs?: number
 }
 
-export default function ConsultationPopup({ delayMs = 20000 }: ConsultationPopupProps) {
+export interface ConsultationPopupRef {
+  open: () => void
+  close: () => void
+}
+
+const ConsultationPopup = forwardRef<ConsultationPopupRef, ConsultationPopupProps>(
+  ({ delayMs = 20000 }, ref) => {
   const [open, setOpen] = useState(false)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -28,16 +34,6 @@ export default function ConsultationPopup({ delayMs = 20000 }: ConsultationPopup
 
   // Only show once per session
   const storageKey = useMemo(() => "cognixai-consultation-popup-shown", [])
-
-  useEffect(() => {
-    if (typeof window === "undefined") return
-    if (sessionStorage.getItem(storageKey) === "1") return
-    const t = setTimeout(() => {
-      setOpen(true)
-      sessionStorage.setItem(storageKey, "1")
-    }, delayMs)
-    return () => clearTimeout(t)
-  }, [delayMs, storageKey])
 
   const handleClose = () => {
     setOpen(false)
@@ -54,6 +50,22 @@ export default function ConsultationPopup({ delayMs = 20000 }: ConsultationPopup
     setErrorMessage("")
     setStatus("idle")
   }
+
+  // Expose methods to parent via ref
+  useImperativeHandle(ref, () => ({
+    open: () => setOpen(true),
+    close: () => handleClose(),
+  }))
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (sessionStorage.getItem(storageKey) === "1") return
+    const t = setTimeout(() => {
+      setOpen(true)
+      sessionStorage.setItem(storageKey, "1")
+    }, delayMs)
+    return () => clearTimeout(t)
+  }, [delayMs, storageKey])
 
   // Fetch company suggestions from external free API (Clearbit autocomplete) as user types
   useEffect(() => {
@@ -313,4 +325,8 @@ export default function ConsultationPopup({ delayMs = 20000 }: ConsultationPopup
       </DialogContent>
     </Dialog>
   )
-}
+})
+
+ConsultationPopup.displayName = "ConsultationPopup"
+
+export default ConsultationPopup
