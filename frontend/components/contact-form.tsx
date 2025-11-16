@@ -159,14 +159,17 @@ export default function ContactForm() {
             />
           </label>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <div className="flex flex-col gap-3">
             <button
               type="submit"
               disabled={status === "sending"}
-              className="w-full sm:w-auto rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-[color:var(--on-brand)]"
+              className="w-full rounded-full bg-[color:var(--brand)] px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_24px_rgba(0,226,143,0.35)] hover:shadow-[0_0_36px_rgba(0,226,143,0.5)] transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              {status === "sending" ? "Sending..." : "Submit"}
+              {status === "sending" ? "Sending..." : "Get My Tailored Plan"}
             </button>
+            <p className="text-xs text-center text-gray-500">
+              Response within 24 hrs. NDA on request. Your data stays private. SOC-aligned practices.
+            </p>
             {status === "sent" && (
               <span className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--brand)]/30 bg-[color:var(--brand)]/10 px-3 py-2 text-xs sm:text-sm text-black text-center">
                 <CheckCircle2 className="text-[color:var(--brand)] flex-shrink-0" />

@@ -194,18 +194,28 @@ export default function HeroClean() {
             Build. Launch. Scale. All with AI automation.
           </h2>
 
+          {/* Proof badges */}
+          <div className="mt-6 md:mt-8 flex flex-wrap items-center justify-center gap-4 px-4 text-xs text-neutral-600">
+            <span className="flex items-center gap-1.5">
+              <span className="font-semibold text-[color:var(--brand)]">200+</span>
+              <span>automations shipped</span>
+            </span>
+            <span className="hidden sm:inline">•</span>
+            <span className="flex items-center gap-1.5">
+              <span className="font-semibold text-[color:var(--brand)]">Avg. 40%</span>
+              <span>cost reduction</span>
+            </span>
+            <span className="hidden sm:inline">•</span>
+            <span className="flex items-center gap-1.5">
+              <span className="font-semibold text-[color:var(--brand)]">6–8 weeks</span>
+              <span>typical delivery</span>
+            </span>
+          </div>
+
           <div
             ref={ctasRef}
             className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 px-4"
           >
-            <a
-              href="/services"
-              aria-label="Explore Our Services"
-              className="group relative rounded-full bg-[color:var(--brand)] w-full sm:w-auto px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.35)] hover:shadow-[0_0_50px_rgba(0,230,195,0.6)] transition-all duration-300 hover:scale-105 overflow-hidden text-center"
-            >
-              <span className="relative z-10">Explore Our Services</span>
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-            </a>
             <button
               type="button"
               onClick={(e) => {
@@ -213,19 +223,44 @@ export default function HeroClean() {
                 openWorkflowAnalysis()
               }}
               aria-label="Get Free Workflow Analysis"
-              className="group relative rounded-full bg-[color:var(--brand)] w-full sm:w-auto px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.35)] hover:shadow-[0_0_50px_rgba(0,230,195,0.6)] transition-all duration-300 hover:scale-105 overflow-hidden text-center"
+              className="group relative rounded-full bg-[color:var(--brand)] w-full sm:w-auto px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,230,195,0.35)] hover:shadow-[0_0_50px_rgba(0,230,195,0.6)] transition-all duration-300 hover:scale-105 overflow-hidden text-center flex-shrink-0"
             >
               <span className="relative z-10">Get Free Workflow Analysis</span>
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
             </button>
             <a
-              href="#contact"
-              aria-label="Book Strategy Call"
-              className="group relative rounded-full border border-neutral-300 w-full sm:w-auto px-6 py-3 text-sm font-medium hover:bg-neutral-100 transition-all duration-300 hover:scale-105 hover:shadow-lg text-center"
+              href="/services"
+              aria-label="Explore Our Services"
+              className="group relative rounded-full bg-gradient-to-r from-[color:var(--brand)]/90 to-[color:var(--brand)] w-full sm:w-auto px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_25px_rgba(0,230,195,0.3)] hover:shadow-[0_0_40px_rgba(0,230,195,0.5)] transition-all duration-300 hover:scale-105 overflow-hidden text-center flex-shrink-0 border border-[color:var(--brand)]/20"
             >
-              <span className="relative z-10">Book Strategy Call</span>
+              <span className="relative z-10">Explore Our Services</span>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+            </a>
+            <a
+              href="#showcase"
+              aria-label="See Interactive Demo"
+              className="group relative rounded-full border-2 border-neutral-300 bg-white w-full sm:w-auto px-6 py-3 text-sm font-medium text-neutral-900 hover:bg-neutral-50 hover:border-neutral-400 transition-all duration-300 hover:scale-105 hover:shadow-lg text-center flex-shrink-0"
+            >
+              <span className="relative z-10">See Interactive Demo</span>
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
             </a>
+          </div>
+
+          {/* Microcopy under CTAs */}
+          <div className="mt-3 flex flex-col sm:flex-row items-center justify-center gap-4 px-4 text-xs text-neutral-500">
+            <span className="flex items-center gap-1.5">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              No sales pitch—actionable plan in 24–48 hrs
+            </span>
+            <span className="hidden sm:inline">•</span>
+            <span className="flex items-center gap-1.5">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              No setup needed—live demo in 5 minutes
+            </span>
           </div>
 
         </div>

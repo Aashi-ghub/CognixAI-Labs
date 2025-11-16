@@ -214,6 +214,66 @@ export default function ShowcaseScroller() {
                       <p className="mt-4 text-sm md:text-[15px] leading-relaxed text-gray-300">
                         {p.description}
                       </p>
+                      
+                      {/* Section-specific CTA with microcopy */}
+                      <div className="mt-6">
+                        {p.id === "call-agent" && (
+                          <>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault()
+                                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+                              }}
+                              className="rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-black shadow-[0_0_24px_rgba(0,226,143,0.35)] hover:shadow-[0_0_36px_rgba(0,226,143,0.5)] transition-all duration-300 hover:scale-105"
+                            >
+                              Launch AI Call Agent
+                            </button>
+                            <p className="mt-2 text-xs text-gray-400">Human-like voice. Instant scheduling. CRM sync.</p>
+                          </>
+                        )}
+                        {p.id === "hiring-agent" && (
+                          <>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault()
+                                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+                              }}
+                              className="rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-black shadow-[0_0_24px_rgba(0,226,143,0.35)] hover:shadow-[0_0_36px_rgba(0,226,143,0.5)] transition-all duration-300 hover:scale-105"
+                            >
+                              Cut Screening Time by 70%
+                            </button>
+                            <p className="mt-2 text-xs text-gray-400">Resume parsing, ranking, structured pre-screens—built for ATS</p>
+                          </>
+                        )}
+                        {p.id === "smart-quote-ai" && (
+                          <>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault()
+                                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+                              }}
+                              className="rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-black shadow-[0_0_24px_rgba(0,226,143,0.35)] hover:shadow-[0_0_36px_rgba(0,226,143,0.5)] transition-all duration-300 hover:scale-105"
+                            >
+                              Generate Quotes in Seconds
+                            </button>
+                            <p className="mt-2 text-xs text-gray-400">Extracts requirements, applies pricing logic, ready to send</p>
+                          </>
+                        )}
+                        {p.id === "sales-agent" && (
+                          <>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault()
+                                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+                              }}
+                              className="rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-black shadow-[0_0_24px_rgba(0,226,143,0.35)] hover:shadow-[0_0_36px_rgba(0,226,143,0.5)] transition-all duration-300 hover:scale-105"
+                            >
+                              Automate Follow-ups & Bookings
+                            </button>
+                            <p className="mt-2 text-xs text-gray-400">Personalized outreach, multi-touch nurture, CRM updates</p>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

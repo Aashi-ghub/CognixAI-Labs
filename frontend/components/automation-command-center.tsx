@@ -56,6 +56,22 @@ export default function AutomationCommandCenter() {
                   <span>Analytics with insights and suggested next actions</span>
                 </li>
               </ul>
+
+              {/* Dual CTAs with proof checklist */}
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                <a
+                  href="#showcase"
+                  className="rounded-full bg-[color:var(--brand)] px-5 py-2.5 text-sm font-medium text-black shadow-[0_0_24px_rgba(0,226,143,0.35)] hover:shadow-[0_0_36px_rgba(0,226,143,0.5)] transition-all duration-300 hover:scale-105 text-center"
+                >
+                  See the Command Center Live
+                </a>
+                <a
+                  href="#contact"
+                  className="rounded-full border-2 border-neutral-300 bg-white px-5 py-2.5 text-sm font-medium text-neutral-900 hover:bg-neutral-50 hover:border-neutral-400 transition-all duration-300 hover:scale-105 text-center"
+                >
+                  Get Your Automation Blueprint
+                </a>
+              </div>
             </div>
           </ScrollReveal>
         </div>
