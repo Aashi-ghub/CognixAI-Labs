@@ -1,16 +1,28 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
+import { sendConsultationSubmissionEmail } from "@/lib/email"
 
 export async function POST(req: Request) {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string
-    if (!supabaseUrl || !serviceKey) {
-      return NextResponse.json({ error: "Server misconfiguration: missing Supabase env vars" }, { status: 500 })
-    }
-    const supabase = createClient(supabaseUrl, serviceKey)
+    // Hardcoded Supabase credentials
+    const supabaseUrl = "https://wyqhofuwxzyyjnffavgq.supabase.co"
+    const serviceKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5cWhvZnV3eHp5eWpuZmZhdmdxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NDQ4MzU4MywiZXhwIjoyMDgwMDU5NTgzfQ.oF5oekaf0y9E8MUsg1aLeTF_aik-aAeMMF8ScY8A-h0"
+    
+    const supabase = createClient(supabaseUrl, serviceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    })
 
-    const body = await req.json()
+    let body
+    try {
+      body = await req.json()
+    } catch (parseError) {
+      console.error("Failed to parse request body:", parseError)
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
+    }
+
     const { name, contact, company, goal, industry, teamSize, challenge, wantsCall, email, phone, companyWebsite, automationRequirements } = body || {}
     
     // Handle both old and new formats
@@ -39,23 +51,60 @@ export async function POST(req: Request) {
       if (companyWebsite) insertData.company_website = companyWebsite
       if (automationRequirements) insertData.automation_requirements = automationRequirements
       
-      const { error } = await supabase.from("consultation_requests").insert(insertData)
+      const { data, error } = await supabase.from("consultation_requests").insert(insertData).select()
       if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        console.error("Database insert error (new format):", {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        })
+        return NextResponse.json({ 
+          error: error.message || "Failed to insert consultation request",
+          details: error.details 
+        }, { status: 500 })
       }
+      if (!data) {
+        console.error("No data returned from insert (new format), but no error")
+        return NextResponse.json({ error: "Failed to insert consultation request" }, { status: 500 })
+      }
+      
+      // Send email notification (don't fail if email fails)
+      try {
+        await sendConsultationSubmissionEmail({
+          name: contactName,
+          email: email || undefined,
+          phone: phone || undefined,
+          company: company || undefined,
+          goal: goalText,
+          industry: industry || undefined,
+          teamSize: teamSize || undefined,
+          challenge: challenge || undefined,
+          wantsCall: wantsCall === true,
+          companyWebsite: companyWebsite || undefined,
+          automationRequirements: automationRequirements || undefined
+        })
+        console.log("Email notification sent successfully (new format)")
+      } catch (emailError) {
+        console.error("Failed to send email notification (non-critical):", emailError)
+      }
+      
       return NextResponse.json({ ok: true })
     }
     
     // Old format (backward compatibility)
-    if (!name || !contact || !goal) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    // For popup: contact can come from email field, so check both
+    const contactValue = contact || email || phone
+    if (!name || !contactValue || !goal) {
+      console.error("Missing required fields:", { name: !!name, contact: !!contactValue, goal: !!goal })
+      return NextResponse.json({ error: "Missing required fields: name, contact (or email/phone), and goal are required" }, { status: 400 })
     }
 
     const insertData: any = { 
-      name, 
-      contact, 
+      name: name.trim(), 
+      contact: contactValue, 
       company: company || null, 
-      goal,
+      goal: goal.trim(),
       industry: null,
       team_size: null,
       challenge: null,
@@ -68,12 +117,61 @@ export async function POST(req: Request) {
     if (companyWebsite) insertData.company_website = companyWebsite
     if (automationRequirements) insertData.automation_requirements = automationRequirements
 
-    const { error } = await supabase.from("consultation_requests").insert(insertData)
+    const { data, error } = await supabase.from("consultation_requests").insert(insertData).select()
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      console.error("Database insert error (old format):", {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      })
+      return NextResponse.json({ 
+        error: error.message || "Failed to insert consultation request",
+        details: error.details 
+      }, { status: 500 })
     }
+    if (!data) {
+      console.error("No data returned from insert (old format), but no error")
+      return NextResponse.json({ error: "Failed to insert consultation request" }, { status: 500 })
+    }
+    
+    // Send email notification (don't fail if email fails)
+    try {
+      await sendConsultationSubmissionEmail({
+        name: name.trim(),
+        email: email || undefined,
+        phone: phone || undefined,
+        company: company || undefined,
+        goal: goal.trim(),
+        industry: undefined,
+        teamSize: undefined,
+        challenge: undefined,
+        wantsCall: false,
+        companyWebsite: companyWebsite || undefined,
+        automationRequirements: automationRequirements || undefined
+      })
+      console.log("Email notification sent successfully (old format)")
+    } catch (emailError) {
+      console.error("Failed to send email notification (non-critical):", emailError)
+    }
+    
     return NextResponse.json({ ok: true })
   } catch (e: any) {
+    console.error("Unexpected error in consultation route:", {
+      message: e?.message,
+      stack: e?.stack,
+      name: e?.name,
+      cause: e?.cause
+    })
+    
+    // Check if it's a fetch/network error
+    if (e?.message?.includes("fetch failed") || e?.name === "TypeError") {
+      return NextResponse.json({ 
+        error: "Database connection failed. Please check your Supabase configuration.",
+        details: e?.message 
+      }, { status: 500 })
+    }
+    
     return NextResponse.json({ error: e?.message || "Unknown error" }, { status: 500 })
   }
 }

@@ -7,6 +7,11 @@ import { useRouter } from "next/navigation"
 import { getUrl } from "../../lib/config"
 import { Button } from "../../components/ui/button"
 
+// Hardcoded admin credentials
+const ADMIN_EMAIL = "admin"
+const ADMIN_PASSWORD = "admin@1281"
+const ADMIN_SESSION_KEY = "admin_logged_in"
+
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -21,6 +26,17 @@ export default function LoginPage() {
   const [isClient, setIsClient] = useState(false)
   const { user } = useAuth()
   const router = useRouter()
+
+  // Check if admin is already logged in
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const adminLoggedIn = sessionStorage.getItem(ADMIN_SESSION_KEY)
+      if (adminLoggedIn === "true") {
+        // Redirect to home if admin is logged in
+        router.push(getUrl.home())
+      }
+    }
+  }, [router])
 
   // Fix hydration by ensuring client-side only rendering
   useEffect(() => {
@@ -86,6 +102,17 @@ export default function LoginPage() {
     e.preventDefault()
     setStatus("sending")
     setErrorMessage("")
+    
+    // Check for hardcoded admin credentials first
+    if (!isSignUp && email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      // Admin login - set session and redirect
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem(ADMIN_SESSION_KEY, "true")
+      }
+      setStatus("idle")
+      router.push(getUrl.home())
+      return
+    }
     
     // Validation for sign up
     if (isSignUp) {
@@ -155,7 +182,11 @@ export default function LoginPage() {
     
     if (error) {
       setStatus("error")
-      setErrorMessage(error.message)
+      if (error.message.includes("provider is not enabled") || error.message.includes("Unsupported provider")) {
+        setErrorMessage("Google sign-in is not configured. Please use email/password or contact support.")
+      } else {
+        setErrorMessage(error.message)
+      }
       }
     } catch (error) {
       setStatus("error")

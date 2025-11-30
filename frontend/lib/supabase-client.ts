@@ -3,7 +3,11 @@
 import { createClient } from "@supabase/supabase-js"
 import { config } from "./config"
 
-// Get environment variables with better error handling
+// Hardcoded Supabase credentials (same as API routes)
+const SUPABASE_URL = "https://wyqhofuwxzyyjnffavgq.supabase.co"
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5cWhvZnV3eHp5eWpuZmZhdmdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0ODM1ODMsImV4cCI6MjA4MDA1OTU4M30.Tpx1oJxHeTdPWsgyFhBG4BGj9HBveDFrABtxXT4Bdzo"
+
+// Get environment variables with fallback to hardcoded values
 const getEnvVar = (key: string): string | undefined => {
   if (typeof window !== 'undefined') {
     // Client-side: environment variables should be available
@@ -14,10 +18,10 @@ const getEnvVar = (key: string): string | undefined => {
   }
 }
 
-// Create Supabase client with dynamic environment variable loading
+// Create Supabase client with hardcoded credentials as fallback
 export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co', 
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key',
+  process.env.NEXT_PUBLIC_SUPABASE_URL || SUPABASE_URL, 
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || SUPABASE_ANON_KEY,
   {
     auth: {
       autoRefreshToken: true,
@@ -31,26 +35,10 @@ export const supabase = createClient(
 // Export for backward compatibility
 export const supabaseClient = supabase
 
-// Check if Supabase is properly configured (only when needed)
+// Check if Supabase is properly configured (always returns true with hardcoded values)
 export const isSupabaseConfigured = () => {
-  // Get fresh environment variables each time
-  const currentUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const currentKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  
-  const hasUrl = !!currentUrl && currentUrl !== 'https://placeholder.supabase.co'
-  const hasKey = !!currentKey && currentKey !== 'placeholder-key'
-  
-  if (!hasUrl || !hasKey) {
-    console.warn('⚠️ Supabase not properly configured:', {
-      hasUrl,
-      hasKey,
-      url: currentUrl ? 'SET' : 'NOT SET',
-      key: currentKey ? 'SET' : 'NOT SET',
-      allEnvKeys: Object.keys(process.env).filter(k => k.startsWith('NEXT_PUBLIC_'))
-    })
-  }
-  
-  return hasUrl && hasKey
+  // Always return true since we have hardcoded credentials
+  return true
 }
 
 

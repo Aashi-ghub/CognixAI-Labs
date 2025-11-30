@@ -169,23 +169,33 @@ const ConsultationPopup = forwardRef<ConsultationPopupRef, ConsultationPopupProp
         className={cn(
           "rounded-lg bg-black/80 border-white/10 text-white backdrop-blur-md",
           "shadow-[0_0_40px_rgba(24,226,165,0.35)]",
-          "max-w-md w-full mx-4"
+          "max-w-md w-[calc(100%-2rem)] sm:w-full",
+          "mx-auto my-auto",
+          "max-h-[90vh] sm:max-h-[85vh] overflow-y-auto",
+          "p-4 sm:p-6"
         )}
         showCloseButton={true}
       >
-        <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-300">
-          <DialogHeader>
-            <DialogTitle className="text-2xl text-white text-center">
+        <div className="space-y-4 sm:space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-300">
+          <DialogHeader className="px-0">
+            <DialogTitle className="text-xl sm:text-2xl text-white text-center">
               Get in Touch 🚀
             </DialogTitle>
           </DialogHeader>
-          <p className="text-center text-white/80 text-sm">
-            Let's discuss how we can help automate your business.
-          </p>
+          <div className="text-center space-y-2">
+            <p className="text-white/80 text-xs sm:text-sm px-2">
+              Let's discuss how we can help automate your business.
+            </p>
+            <div className="flex items-center justify-center px-3 py-2 sm:py-2.5 rounded-full bg-[color:var(--brand,#18e2a5)]/20 border border-[color:var(--brand,#18e2a5)]/30 w-full">
+              <span className="text-[color:var(--brand,#18e2a5)] text-[10px] sm:text-xs font-medium leading-relaxed text-center">
+                🎉 Join top businesses accelerating with us — get <span className="font-bold">20% off</span> your first project when you sign up
+              </span>
+            </div>
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name" className="text-white/90 text-sm">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+            <div className="grid gap-1.5 sm:gap-2">
+              <Label htmlFor="name" className="text-white/90 text-xs sm:text-sm">
                 Name <span className="text-red-400">*</span>
               </Label>
               <Input
@@ -194,14 +204,14 @@ const ConsultationPopup = forwardRef<ConsultationPopupRef, ConsultationPopupProp
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your full name"
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/50 h-11"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/50 h-10 sm:h-11 text-sm sm:text-base"
                 required
                 disabled={status === "sending" || status === "sent"}
               />
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="email" className="text-white/90 text-sm">
+            <div className="grid gap-1.5 sm:gap-2">
+              <Label htmlFor="email" className="text-white/90 text-xs sm:text-sm">
                 Email <span className="text-red-400">*</span>
               </Label>
               <Input
@@ -210,14 +220,14 @@ const ConsultationPopup = forwardRef<ConsultationPopupRef, ConsultationPopupProp
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your.email@example.com"
-                className="bg-white/5 border-white/10 text-white placeholder:text-white/50 h-11"
+                className="bg-white/5 border-white/10 text-white placeholder:text-white/50 h-10 sm:h-11 text-sm sm:text-base"
                 required
                 disabled={status === "sending" || status === "sent"}
               />
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="phone" className="text-white/90 text-sm">
+            <div className="grid gap-1.5 sm:gap-2">
+              <Label htmlFor="phone" className="text-white/90 text-xs sm:text-sm">
                 Phone Number <span className="text-red-400">*</span>
               </Label>
               <PhoneInput
@@ -227,11 +237,12 @@ const ConsultationPopup = forwardRef<ConsultationPopupRef, ConsultationPopupProp
                 placeholder="Phone number"
                 required
                 disabled={status === "sending" || status === "sent"}
+                className="flex-col sm:flex-row gap-2"
               />
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="company" className="text-white/90 text-sm">
+            <div className="grid gap-1.5 sm:gap-2">
+              <Label htmlFor="company" className="text-white/90 text-xs sm:text-sm">
                 Company (Optional)
               </Label>
               <div className="relative company-selector-container">
@@ -246,16 +257,16 @@ const ConsultationPopup = forwardRef<ConsultationPopupRef, ConsultationPopupProp
                   }}
                   onFocus={() => setShowCompanyList(true)}
                   placeholder="Search company"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/50 h-11"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/50 h-10 sm:h-11 text-sm sm:text-base"
                   disabled={status === "sending" || status === "sent"}
                 />
                 {showCompanyList && companySuggestions.length > 0 && (
-                  <div className="absolute z-50 mt-1 w-full rounded-md border border-white/10 bg-black/90 backdrop-blur-md text-white shadow-lg max-h-56 overflow-auto">
+                  <div className="absolute z-50 mt-1 w-full rounded-md border border-white/10 bg-black/90 backdrop-blur-md text-white shadow-lg max-h-48 sm:max-h-56 overflow-auto">
                     {companySuggestions.map((c) => (
                       <button
                         type="button"
                         key={c}
-                        className="w-full text-left px-3 py-2 hover:bg-white/10 transition"
+                        className="w-full text-left px-3 py-2 hover:bg-white/10 transition text-xs sm:text-sm"
                         onClick={() => {
                           setCompanyChoice(c)
                           setCompany(c)
@@ -269,7 +280,7 @@ const ConsultationPopup = forwardRef<ConsultationPopupRef, ConsultationPopupProp
                     <div className="border-t border-white/10" />
                     <button
                       type="button"
-                      className="w-full text-left px-3 py-2 hover:bg-white/10 transition"
+                      className="w-full text-left px-3 py-2 hover:bg-white/10 transition text-xs sm:text-sm"
                       onClick={() => {
                         setCompanyChoice("__other__")
                         setCompany("")
@@ -287,21 +298,21 @@ const ConsultationPopup = forwardRef<ConsultationPopupRef, ConsultationPopupProp
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
                   placeholder="Enter company name"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/50 h-11"
+                  className="bg-white/5 border-white/10 text-white placeholder:text-white/50 h-10 sm:h-11 text-sm sm:text-base"
                   disabled={status === "sending" || status === "sent"}
                 />
               )}
             </div>
 
             {errorMessage && (
-              <div className="text-[#ffb4b4] text-sm">
+              <div className="text-[#ffb4b4] text-xs sm:text-sm px-1">
                 {errorMessage}
               </div>
             )}
 
             {status === "sent" && (
-              <div className="flex items-start gap-2 rounded-md border border-[color:var(--brand,#18e2a5)]/30 bg-[color:var(--brand,#18e2a5)]/10 px-4 py-3 text-sm">
-                <CheckCircle2 className="shrink-0 text-[color:var(--brand,#18e2a5)] mt-0.5" />
+              <div className="flex items-start gap-2 rounded-md border border-[color:var(--brand,#18e2a5)]/30 bg-[color:var(--brand,#18e2a5)]/10 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm">
+                <CheckCircle2 className="shrink-0 text-[color:var(--brand,#18e2a5)] mt-0.5 w-4 h-4 sm:w-5 sm:h-5" />
                 <div className="text-white/90">
                   Thank you! We'll be in touch soon.
                 </div>
@@ -312,10 +323,11 @@ const ConsultationPopup = forwardRef<ConsultationPopupRef, ConsultationPopupProp
               type="submit"
               disabled={status === "sending" || status === "sent"}
               className={cn(
-                "w-full h-12 rounded-lg font-semibold text-base",
+                "w-full h-11 sm:h-12 rounded-lg font-semibold text-sm sm:text-base",
                 "bg-[var(--color-accent,#18e2a5)] text-black hover:bg-[var(--color-accent,#18e2a5)]/90",
                 "shadow-[0_0_24px_rgba(24,226,165,0.6)] hover:shadow-[0_0_36px_rgba(24,226,165,0.75)]",
-                "disabled:opacity-50 disabled:cursor-not-allowed"
+                "disabled:opacity-50 disabled:cursor-not-allowed",
+                "mt-2 sm:mt-0"
               )}
             >
               {status === "sending" ? "Submitting…" : status === "sent" ? "Submitted!" : "Submit"}
