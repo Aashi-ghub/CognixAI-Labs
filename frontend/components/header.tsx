@@ -2,7 +2,7 @@
 "use client"
 import ScrollGlassNav from "./scroll-glass-nav"
 import { useAuth } from "../lib/auth-context"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import {
@@ -13,11 +13,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
-import { Settings, ShoppingBag, LogOut, User } from "lucide-react"
+import { Settings, ShoppingBag, LogOut, User, Menu } from "lucide-react"
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
+import { useConsultationPopup } from "@/lib/consultation-popup-context"
 
 export default function Header() {
   const { user, signOut } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
+  const { openWorkflowAnalysis, openConsultationPopup } = useConsultationPopup()
 
   const handleLogout = async () => {
     await signOut()
@@ -60,9 +64,20 @@ export default function Header() {
             <Link href="/services" className=" hover:opacity-80 transition">
               Services
             </Link>
-            <a href="#demo" className=" hover:opacity-80 transition">
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                // Check if we're on services page, open consultation popup, otherwise go to showcase
+                if (pathname === "/services") {
+                  openConsultationPopup()
+                } else {
+                  router.push("/#showcase")
+                }
+              }}
+              className="hover:opacity-80 transition cursor-pointer"
+            >
               Demo
-            </a>
+            </button>
             {!user && (
               <Link
                 href="/login"
@@ -71,12 +86,15 @@ export default function Header() {
                 Login
               </Link>
             )}
-            <a
-              href="#contact"
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                openWorkflowAnalysis()
+              }}
               className="btn btn-primary glow-teal !px-3 !py-1.5 text-xs md:!px-3 md:!py-1.5 md:text-sm text-white"
             >
               Book Free Consultation
-            </a>
+            </button>
             {user && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -131,6 +149,94 @@ export default function Header() {
               </DropdownMenu>
             )}
           </nav>
+          
+          {/* Mobile Menu */}
+          <Sheet>
+            <SheetTrigger asChild className="md:hidden">
+              <button className="p-2 hover:opacity-80 transition" aria-label="Open menu">
+                <Menu className="h-6 w-6 text-white" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] bg-neutral-900 text-white border-neutral-800">
+              <nav className="flex flex-col gap-6 mt-8">
+                <Link href="/services" className="text-lg hover:opacity-80 transition">
+                  Services
+                </Link>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    // Check if we're on services page, open consultation popup, otherwise go to showcase
+                    if (pathname === "/services") {
+                      openConsultationPopup()
+                    } else {
+                      router.push("/#showcase")
+                    }
+                  }}
+                  className="text-lg hover:opacity-80 transition text-left"
+                >
+                  Demo
+                </button>
+                {!user && (
+                  <Link
+                    href="/login"
+                    className="text-lg hover:opacity-80 transition"
+                  >
+                    Login
+                  </Link>
+                )}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    openWorkflowAnalysis()
+                  }}
+                  className="btn btn-primary glow-teal !px-4 !py-2 text-sm text-white w-fit"
+                >
+                  Book Free Consultation
+                </button>
+                {user && (
+                  <div className="flex flex-col gap-4 pt-4 border-t border-neutral-800">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={user.user_metadata?.avatar_url} alt={user.email || ""} />
+                        <AvatarFallback className="bg-teal-500/20 text-white text-sm font-semibold">
+                          {user.email ? getInitials(user.email) : <User className="h-5 w-5" />}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium text-white">My Account</p>
+                        <p className="text-xs text-neutral-400 truncate max-w-[200px]">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+                    <Link 
+                      href="/dashboard/settings" 
+                      onClick={(e) => handleProtectedNavigation("/dashboard/settings", e)}
+                      className="flex items-center gap-2 text-base hover:opacity-80 transition"
+                    >
+                      <Settings className="h-5 w-5" />
+                      Settings
+                    </Link>
+                    <Link 
+                      href="/dashboard/purchases"
+                      onClick={(e) => handleProtectedNavigation("/dashboard/purchases", e)}
+                      className="flex items-center gap-2 text-base hover:opacity-80 transition"
+                    >
+                      <ShoppingBag className="h-5 w-5" />
+                      My Purchases
+                    </Link>
+                    <button 
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 text-base text-red-400 hover:opacity-80 transition text-left"
+                    >
+                      <LogOut className="h-5 w-5" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </header>
       <ScrollGlassNav />

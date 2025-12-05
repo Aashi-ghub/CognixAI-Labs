@@ -3,11 +3,9 @@ import { createClient } from "@supabase/supabase-js"
 
 export async function GET() {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string
-    if (!supabaseUrl || !serviceKey) {
-      return NextResponse.json({ error: "Server misconfiguration: missing Supabase env vars" }, { status: 500 })
-    }
+    // Hardcoded Supabase credentials
+    const supabaseUrl = "https://wyqhofuwxzyyjnffavgq.supabase.co"
+    const serviceKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5cWhvZnV3eHp5eWpuZmZhdmdxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NDQ4MzU4MywiZXhwIjoyMDgwMDU5NTgzfQ.oF5oekaf0y9E8MUsg1aLeTF_aik-aAeMMF8ScY8A-h0"
     const supabase = createClient(supabaseUrl, serviceKey)
 
     // Pull distinct non-empty company names from profiles

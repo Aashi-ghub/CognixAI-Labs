@@ -40,11 +40,11 @@ export default function GetStartedFlow() {
       {/* Top fade to blend with dark Showcase above; no bottom fade so it meets white section cleanly */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[color:var(--charcoal)] to-transparent z-10" />
       <div className="mx-auto max-w-6xl px-4">
-        <h2 className="text-center text-3xl md:text-4xl font-semibold tracking-tight" style={{ color: "#000" }}>
+        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight px-4" style={{ color: "#000" }}>
           How to Get Started
         </h2>
-        <p className="mt-3 text-center text-[15px]" style={{ color: "#111", opacity: 0.8 }}>
-          We’ll tailor the automation to your business goals — no generic bots, only real results.
+        <p className="mt-3 text-center text-sm sm:text-[15px] px-4" style={{ color: "#111", opacity: 0.8 }}>
+          We'll tailor the automation to your business goals — no generic bots, only real results.
         </p>
 
         <div className={`relative mt-12 md:mt-16 transition-all duration-700 ${containerInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
@@ -90,6 +90,16 @@ export default function GetStartedFlow() {
               </div>
               <h3 className="font-semibold text-lg" style={{ color: "#000" }}>Share Your Goals</h3>
               <p className="mt-2 text-sm" style={{ color: "#1f2937" }}>Tell us your outcomes; we translate them into an automation plan.</p>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+                }}
+                className="mt-4 rounded-full bg-[color:var(--brand)] px-4 py-2 text-xs font-medium text-black shadow-[0_0_20px_rgba(0,226,143,0.25)] hover:shadow-[0_0_30px_rgba(0,226,143,0.4)] transition-all duration-300 hover:scale-105"
+              >
+                Send Goals—Get Plan
+              </button>
+              <p className="mt-2 text-xs text-gray-500">Privacy protected. NDA on request.</p>
             </div>
 
             <div
@@ -102,6 +112,16 @@ export default function GetStartedFlow() {
               </div>
               <h3 className="font-semibold text-lg" style={{ color: "#000" }}>Build Your Custom AI Agent</h3>
               <p className="mt-2 text-sm" style={{ color: "#1f2937" }}>We configure a tailored agent with your data, tools, and guardrails.</p>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+                }}
+                className="mt-4 rounded-full bg-[color:var(--brand)] px-4 py-2 text-xs font-medium text-black shadow-[0_0_20px_rgba(0,226,143,0.25)] hover:shadow-[0_0_30px_rgba(0,226,143,0.4)] transition-all duration-300 hover:scale-105"
+              >
+                Scope My Agent
+              </button>
+              <p className="mt-2 text-xs text-gray-500">No engineering required—done for you</p>
             </div>
 
             <div
@@ -114,16 +134,29 @@ export default function GetStartedFlow() {
               </div>
               <h3 className="font-semibold text-lg" style={{ color: "#000" }}>Launch & Scale</h3>
               <p className="mt-2 text-sm" style={{ color: "#1f2937" }}>Deploy quickly, measure impact, and scale with confidence.</p>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+                }}
+                className="mt-4 rounded-full bg-[color:var(--brand)] px-4 py-2 text-xs font-medium text-black shadow-[0_0_20px_rgba(0,226,143,0.25)] hover:shadow-[0_0_30px_rgba(0,226,143,0.4)] transition-all duration-300 hover:scale-105"
+              >
+                Start With One Workflow
+              </button>
+              <p className="mt-2 text-xs text-gray-500">De-risk with a single automation first</p>
             </div>
           </div>
 
-          <div className="mt-10 flex justify-center">
+          <div className="mt-8 md:mt-10 flex flex-col items-center gap-3 px-4">
             <a
               href="#contact"
-              className="inline-flex items-center rounded-2xl bg-[color:var(--brand)] px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,226,143,0.25)] transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]/60"
+              className="inline-flex items-center rounded-full bg-[color:var(--brand)] w-full sm:w-auto justify-center px-6 py-3 text-sm font-medium text-[color:var(--on-brand)] shadow-[0_0_30px_rgba(0,226,143,0.35)] hover:shadow-[0_0_50px_rgba(0,226,143,0.5)] transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]/60"
             >
-              Book a Free Consultation
+              Get My Custom Automation Plan
             </a>
+            <p className="text-xs text-center text-gray-500 max-w-md">
+              Join 200+ teams scaling with CognixAI. See how much you can automate.
+            </p>
           </div>
         </div>
       </div>
